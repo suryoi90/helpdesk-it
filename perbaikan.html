@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form Pengajuan Perbaikan IT - PT Global Dispomedika</title>
+  <title>Form pengajuan perbaikan IT - PT. Global Dispomedika</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
@@ -13,7 +13,7 @@
 <body class="bg-[#f0f4f9] min-h-screen py-8 px-4 sm:px-6">
   <div class="max-w-2xl mx-auto space-y-4">
     
-    <!-- Banner Header Form Pengajuan Perbaikan IT -->
+    <!-- Banner Header Resmi CDAKB -->
     <div class="bg-white rounded-2xl shadow-sm border-t-4 border-indigo-600 p-6 sm:p-8 text-center">
       
       <!-- Logo Perusahaan (200px) -->
@@ -24,239 +24,254 @@
              class="object-contain mx-auto">
       </div>
 
-      <!-- Badge Sistem -->
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-bold rounded-full uppercase tracking-wider mb-2.5">
-        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-        IT Repair & Maintenance Portal
-      </div>
-
-      <!-- Judul Resmi -->
       <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight mb-1">
-        Form Pengajuan Perbaikan IT
+        Form pengajuan perbaikan IT
       </h1>
-      <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
-        PT Global Dispomedika
+      <p class="text-sm font-semibold text-slate-500 mb-3">
+        formulir ini untuk IT di CDAKB di PT. Global Dispomedika
       </p>
 
-      <p class="text-slate-600 text-sm leading-relaxed max-w-lg mx-auto">
-        Formulir resmi pelaporan dan pengajuan perbaikan perangkat hardware/software kerja yang mengalami kerusakan atau memerlukan pemeliharaan teknis.
-      </p>
-
-      <div class="mt-4 inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-medium">
+      <div class="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-medium">
         <span class="font-bold text-rose-500">*</span>
-        <span>Wajib diisi untuk proses registrasi dan analisa teknisi IT</span>
+        <span>Menunjukkan pertanyaan yang wajib diisi</span>
       </div>
     </div>
 
     <!-- Alert Sukses Modal -->
     <div id="successModal" class="hidden bg-white border border-green-300 rounded-2xl p-6 shadow-lg text-center space-y-3">
       <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-      <h3 class="text-lg font-bold text-gray-800">Pengajuan Perbaikan Berhasil Didaftarkan!</h3>
-      <p class="text-sm text-gray-600">Nomor Registrasi Tiket Perbaikan:</p>
+      <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Perbaikan Berhasil Terkirim!</h3>
+      <p class="text-sm text-gray-600">Nomor Registrasi:</p>
       <div id="displayTicketId" class="inline-block bg-indigo-50 text-indigo-700 font-mono font-bold px-5 py-2.5 rounded-xl text-xl border border-indigo-200">
         RPR-XXXX
       </div>
       <p class="text-xs text-gray-600">
-        Dokumen resmi telah dikirim ke email pemohon. Tim teknis IT akan segera melakukan pengecekan fisik perangkat.
+        Data telah tersimpan ke sistem IT CDAKB. Tim IT akan segera memproses pengajuan ini.
       </p>
       <div class="pt-3">
         <button onclick="resetFormView()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow">
-          + Ajukan Perbaikan Baru
+          + Buat Pengajuan Baru
         </button>
       </div>
     </div>
 
-    <!-- Form Perbaikan IT -->
-    <form id="repairForm" class="space-y-4 text-left">
+    <!-- Form Container -->
+    <form id="perbaikanForm" class="space-y-4 text-left">
       
-      <!-- 1. Identitas Karyawan (Autocomplete) -->
+      <!-- 1. Nama Lengkap Pemohon (Departemen Pemohon) -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition relative">
         <label class="block text-gray-800 font-semibold text-sm mb-1">
-          Nama Lengkap / Email / NIK Pemohon <span class="text-red-500">*</span>
+          Nama Lengkap Pemohon (Departemen Pemohon) <span class="text-red-500">*</span>
         </label>
-        <p class="text-xs text-gray-500 mb-2">Ketik nama atau NIK untuk pengisian otomatis</p>
+        <p class="text-xs text-gray-400 mb-2">contoh : Monalisa (Finance & Accounting)</p>
         
         <div class="relative">
-          <input type="text" id="employeeInput" name="Nama Lengkap" required autocomplete="off"
-            placeholder="Ketik Nama, NIK, atau Email..."
+          <input type="text" id="pemohonDeptInput" name="Nama Lengkap Pemohon (Departemen Pemohon)" required autocomplete="off"
+            placeholder="Jawaban Anda"
             oninput="handleSearch(this.value)"
             class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 transition">
           
           <div id="autocompleteList" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto divide-y divide-gray-100"></div>
         </div>
 
-        <div id="selectedEmployeeBadge" class="hidden mt-3 p-3 bg-indigo-50 border border-indigo-200 rounded-xl flex items-center justify-between">
-          <div class="text-xs text-indigo-900">
-            <span class="font-bold block" id="badgeName">-</span>
-            <span class="text-indigo-600" id="badgeDetails">-</span>
-          </div>
-          <span class="text-xs font-semibold bg-indigo-200 text-indigo-800 px-2 py-1 rounded-md">✓ Data Terverifikasi</span>
+        <input type="hidden" id="emailHidden" name="Email Pelapor" value="">
+      </div>
+
+      <!-- 2. Nama Barang (Checkboxes) -->
+      <div class="bg-white rounded-2xl shadow-sm p-6">
+        <label class="block text-gray-800 font-semibold text-sm mb-1">
+          Nama Barang <span class="text-red-500">*</span>
+        </label>
+        <p class="text-xs text-gray-400 mb-3">Nama barang yang diajukan : contoh : Pointer</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700">
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Laptop" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Laptop</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Personal Computer" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Personal Computer</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Pointer" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Pointer</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Printer" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Printer</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="SSD" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>SSD</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="RAM" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>RAM</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Keyboard" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Keyboard</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="CCTV" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>CCTV</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Web Cam" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Web Cam</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Headphone" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Headphone</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Mouse" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Mouse</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Nama Barang" value="Tinta" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Tinta</span>
+          </label>
+        </div>
+
+        <!-- Yang lain -->
+        <div class="mt-3 flex items-center space-x-2">
+          <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+            <input type="checkbox" id="chkBarangLain" onchange="toggleLainnyaInput('chkBarangLain', 'inputBarangLain')" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Yang lain:</span>
+          </label>
+          <input type="text" id="inputBarangLain" placeholder="Tuliskan nama barang..." 
+            class="flex-1 border-b border-gray-300 focus:border-indigo-600 outline-none py-1 text-sm text-gray-800">
         </div>
       </div>
 
-      <!-- 2. Email Pemohon -->
+      <!-- 3. Tipe -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-1">
-          Email Pemohon <span class="text-red-500">*</span>
-        </label>
-        <input type="email" id="emailInput" name="Email Pelapor" required placeholder="nama@dispomedika.com"
-          class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 transition">
-      </div>
-
-      <!-- 3. Departemen -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-2">Department / Team <span class="text-red-500">*</span></label>
-        <select id="deptSelect" name="Department/Team" required class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="" disabled selected>-- Pilih Departemen / Tim --</option>
-          <option value="Sales">Sales</option>
-          <option value="Marketing">Marketing</option>
-          <option value="Human Resources">Human Resources</option>
-          <option value="Finance">Finance</option>
-          <option value="Operational">Operational</option>
-          <option value="T&D">T&D</option>
-        </select>
-      </div>
-
-      <!-- 4. Perangkat yang Diperbaiki -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-2">Perangkat yang Mengalami Kerusakan <span class="text-red-500">*</span></label>
-        <select id="selectPerangkat" name="Kategori kendala" required onchange="handleDeviceOther(this.value)" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="" disabled selected>-- Pilih Perangkat --</option>
-          <option value="Laptop / Notebook">Laptop / Notebook</option>
-          <option value="PC Komputer / CPU">PC Komputer / CPU</option>
-          <option value="Monitor">Monitor</option>
-          <option value="Printer / Scanner">Printer / Scanner</option>
-          <option value="UPS / Kelistrikan IT">UPS / Kelistrikan IT</option>
-          <option value="Perangkat Jaringan (Switch / Router / Wi-Fi)">Perangkat Jaringan (Switch / Router / Wi-Fi)</option>
-          <option value="Yang lain:">Yang lain:</option>
-        </select>
-
-        <div id="extraPerangkatLainnya" class="hidden mt-3">
-          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan nama perangkat lainnya:</label>
-          <input type="text" id="inputPerangkatLainnya" placeholder="Contoh: Barcode Scanner, Mesin Fax, Kabel Proyektor..."
-            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
-        </div>
-      </div>
-
-      <!-- 5. Merk / Tipe / Serial Number / Asset Tag -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-1">
-          Merk, Tipe & Nomor Seri (Asset Tag / SN)
-        </label>
-        <p class="text-xs text-gray-400 mb-2">Contoh: Lenovo ThinkPad L14 / SN: PF2XXXX / Asset: AST-0145</p>
-        <input type="text" name="Jenis hardware apa yang mengalami kendala?" placeholder="Tuliskan merk / tipe / nomor seri perangkat..."
+        <label class="block text-gray-800 font-semibold text-sm mb-2">Tipe</label>
+        <input type="text" name="Tipe" placeholder="Jawaban Anda"
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
       </div>
 
-      <!-- 6. Tingkat Urgensi -->
+      <!-- 4. Keluhan -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-3">Tingkat Urgensi Perbaikan <span class="text-red-500">*</span></label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
-            <input type="radio" name="Tingkat urgensi" value="Low" required class="mb-1 text-indigo-600">
-            <span class="text-xs font-semibold text-gray-700">Low</span>
+        <label class="block text-gray-800 font-semibold text-sm mb-2">
+          Keluhan <span class="text-red-500">*</span>
+        </label>
+        <textarea name="Keluhan" rows="3" required placeholder="Jawaban Anda"
+          class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
+      </div>
+
+      <!-- 5. Jenis Pekerjaan (Checkboxes) -->
+      <div class="bg-white rounded-2xl shadow-sm p-6">
+        <label class="block text-gray-800 font-semibold text-sm mb-3">
+          Jenis Pekerjaan <span class="text-red-500">*</span>
+        </label>
+        <div class="space-y-2 text-sm text-gray-700">
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Jenis Pekerjaan" value="INSTALASI" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span class="font-medium">INSTALASI</span>
           </label>
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
-            <input type="radio" name="Tingkat urgensi" value="Medium" class="mb-1 text-indigo-600">
-            <span class="text-xs font-semibold text-gray-700">Medium</span>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Jenis Pekerjaan" value="PERBAIKAN" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span class="font-medium">PERBAIKAN</span>
           </label>
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
-            <input type="radio" name="Tingkat urgensi" value="High" class="mb-1 text-indigo-600">
-            <span class="text-xs font-semibold text-orange-600">High</span>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Jenis Pekerjaan" value="KALIBRASI" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span class="font-medium">KALIBRASI</span>
           </label>
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-red-400 has-[:checked]:border-red-600 has-[:checked]:bg-red-50/50">
-            <input type="radio" name="Tingkat urgensi" value="Critical" class="mb-1 text-red-600">
-            <span class="text-xs font-semibold text-red-600">Critical</span>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Jenis Pekerjaan" value="PENGADAAN BARANG" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span class="font-medium">PENGADAAN BARANG</span>
           </label>
         </div>
       </div>
 
-      <!-- 7. Deskripsi Kronologi Kerusakan -->
+      <!-- 6. Estimasi waktu perbaikan (Checkboxes) -->
+      <div class="bg-white rounded-2xl shadow-sm p-6">
+        <label class="block text-gray-800 font-semibold text-sm mb-3">
+          Estimasi waktu perbaikan <span class="text-red-500">*</span>
+        </label>
+        <div class="space-y-2 text-sm text-gray-700">
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Estimasi waktu perbaikan" value="1 minggu" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>1 minggu</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Estimasi waktu perbaikan" value="2 minggu" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>2 minggu</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Estimasi waktu perbaikan" value="3 minggu" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>3 minggu</span>
+          </label>
+          <label class="flex items-center space-x-2.5 p-2 rounded-lg hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" name="Estimasi waktu perbaikan" value="1 bulan" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>1 bulan</span>
+          </label>
+        </div>
+
+        <!-- Yang lain -->
+        <div class="mt-3 flex items-center space-x-2">
+          <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+            <input type="checkbox" id="chkWaktuLain" onchange="toggleLainnyaInput('chkWaktuLain', 'inputWaktuLain')" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <span>Yang lain:</span>
+          </label>
+          <input type="text" id="inputWaktuLain" placeholder="Tuliskan estimasi waktu..." 
+            class="flex-1 border-b border-gray-300 focus:border-indigo-600 outline-none py-1 text-sm text-gray-800">
+        </div>
+      </div>
+
+      <!-- 7. Keterangan -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+        <label class="block text-gray-800 font-semibold text-sm mb-2">
+          Keterangan <span class="text-red-500">*</span>
+        </label>
+        <textarea name="Keterangan" rows="3" required placeholder="Jawaban Anda"
+          class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
+      </div>
+
+      <!-- 8. Tanggal Pelaksana -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
         <label class="block text-gray-800 font-semibold text-sm mb-1">
-          Deskripsi Kronologi Kerusakan & Gejala Kendala <span class="text-red-500">*</span>
+          Tanggal Pelaksana <span class="text-red-500">*</span>
         </label>
-        <p class="text-xs text-gray-400 mb-2">Jelaskan bagaimana kerusakan terjadi, pesan error yang muncul, atau kondisi fisik perangkat</p>
-        <textarea name="Deskripsi Kendala" rows="4" required placeholder="Contoh: Laptop mati total setelah terkena tumpahan air, atau monitor bergaris-garis saat dinyalakan..." class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
+        <p class="text-xs text-gray-400 mb-2">Tanggal</p>
+        <input type="date" id="tglPelaksanaInput" name="Tanggal Pelaksana" required
+          class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 bg-transparent">
       </div>
 
-      <!-- 8. Lampiran Foto Bukti Kerusakan Fisik (Upload & Kamera) -->
-      <div id="attachmentSection" class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-1">
-          Lampiran Foto/Screenshot: Bukti layar error atau kerusakan fisik <span class="text-red-500 font-bold">*</span>
+      <!-- 9. Pemohon -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+        <label class="block text-gray-800 font-semibold text-sm mb-2">
+          Pemohon <span class="text-red-500">*</span>
         </label>
-        <p class="text-xs text-gray-500 mb-4">Pilih dari file/galeri atau ambil foto langsung menggunakan kamera</p>
-        
-        <input type="file" id="fileInput" accept="image/*,.pdf" onchange="handleFileSelect(event)" class="hidden">
-        <input type="file" id="cameraMobileInput" accept="image/*" capture="environment" onchange="handleFileSelect(event)" class="hidden">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-          <button type="button" onclick="document.getElementById('fileInput').click()"
-            class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-100/50 text-indigo-700 text-sm font-semibold transition">
-            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            <span>Pilih Dari File / Galeri</span>
-          </button>
-
-          <button type="button" onclick="openCameraModal()"
-            class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl border-2 border-indigo-600 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            <span>Ambil Foto Fisik</span>
-          </button>
-        </div>
-
-        <div id="previewContainer" class="hidden p-3 bg-gray-50 border border-gray-200 rounded-xl mt-3 flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <img id="previewImage" src="" alt="Preview" class="w-14 h-14 object-cover rounded-lg border border-gray-300">
-            <div>
-              <div id="previewFileName" class="text-xs font-bold text-gray-800 truncate max-w-[200px]">Foto_Kerusakan.jpg</div>
-              <div class="text-[11px] text-green-600 font-semibold">✓ Foto siap dilampirkan</div>
-            </div>
-          </div>
-          <button type="button" onclick="clearAttachment()" class="text-xs text-red-600 hover:text-red-800 font-semibold px-2 py-1 bg-red-50 hover:bg-red-100 rounded-lg">
-            Hapus / Ganti
-          </button>
-        </div>
+        <input type="text" id="pemohonInput" name="Pemohon" required placeholder="Jawaban Anda"
+          class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
       </div>
 
-      <!-- Submit Button -->
+      <!-- 10. Atasan Pemohon -->
+      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+        <label class="block text-gray-800 font-semibold text-sm mb-2">
+          Atasan Pemohon <span class="text-red-500">*</span>
+        </label>
+        <input type="text" name="Atasan Pemohon" required placeholder="Jawaban Anda"
+          class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
+      </div>
+
+      <!-- Submit & Navigasi -->
       <div class="flex items-center justify-between pt-2">
         <button type="submit" id="btnSubmit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-md transition text-sm flex items-center space-x-2">
-          <span id="btnText">Kirim Pengajuan Perbaikan</span>
+          <span id="btnText">Kirim Pengajuan Perbaikan IT</span>
           <svg id="btnSpinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
           </svg>
         </button>
-        <a href="/" class="text-gray-500 hover:text-gray-700 text-sm font-medium px-4 py-2">Kembali ke Portal Utama</a>
+        <a href="/" class="text-gray-500 hover:text-gray-700 text-sm font-medium px-4 py-2">Kembali ke Helpdesk</a>
       </div>
 
     </form>
-  </div>
-
-  <!-- MODAL KAMERA INTERAKTIF -->
-  <div id="cameraModal" class="hidden fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 space-y-4 shadow-2xl text-center">
-      <div class="flex justify-between items-center">
-        <h3 class="font-bold text-gray-800 text-sm">Ambil Foto Fisik Kerusakan</h3>
-        <button type="button" onclick="closeCameraModal()" class="text-gray-400 hover:text-gray-600 text-lg font-bold">&times;</button>
-      </div>
-      <div class="relative bg-black rounded-xl overflow-hidden aspect-video flex items-center justify-center">
-        <video id="cameraVideo" autoplay playsinline class="w-full h-full object-cover"></video>
-      </div>
-      <div class="flex justify-center space-x-3 pt-1">
-        <button type="button" onclick="captureCameraPhoto()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center space-x-2 shadow">
-          <span>Jepret Foto</span>
-        </button>
-        <button type="button" onclick="closeCameraModal()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-xl text-sm font-semibold">
-          Batal
-        </button>
-      </div>
-    </div>
   </div>
 
   <script>
@@ -264,8 +279,14 @@
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
 
     var employeeData = [];
-    var currentAttachment = { fileData: null, fileName: "", fileType: "" };
-    var activeCameraStream = null;
+
+    // Set tanggal pelaksana otomatis hari ini
+    window.addEventListener("DOMContentLoaded", function() {
+      var today = new Date().toISOString().split('T')[0];
+      var tglElem = document.getElementById("tglPelaksanaInput");
+      if (tglElem) tglElem.value = today;
+      loadAllEmployees();
+    });
 
     async function loadAllEmployees() {
       try {
@@ -292,79 +313,14 @@
       } catch (err) {}
     }
 
-    window.addEventListener("DOMContentLoaded", function() {
-      loadAllEmployees();
-    });
-
-    function handleDeviceOther(val) {
-      document.getElementById("extraPerangkatLainnya").classList.toggle("hidden", val !== "Yang lain:");
-    }
-
-    function handleFileSelect(event) {
-      var file = event.target.files[0];
-      if (!file) return;
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        setAttachment(e.target.result, file.name, file.type);
-      };
-      reader.readAsDataURL(file);
-    }
-
-    async function openCameraModal() {
-      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        try {
-          var stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: { ideal: "environment" } } 
-          });
-          activeCameraStream = stream;
-          var video = document.getElementById("cameraVideo");
-          video.srcObject = stream;
-          document.getElementById("cameraModal").classList.remove("hidden");
-        } catch (err) {
-          document.getElementById("cameraMobileInput").click();
-        }
+    function toggleLainnyaInput(chkId, inputId) {
+      var chk = document.getElementById(chkId);
+      var inp = document.getElementById(inputId);
+      if (chk.checked) {
+        inp.focus();
       } else {
-        document.getElementById("cameraMobileInput").click();
+        inp.value = "";
       }
-    }
-
-    function captureCameraPhoto() {
-      var video = document.getElementById("cameraVideo");
-      var canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth || 640;
-      canvas.height = video.videoHeight || 480;
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      var dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-      var fileName = "Foto_Perbaikan_" + Date.now() + ".jpg";
-      setAttachment(dataUrl, fileName, "image/jpeg");
-      closeCameraModal();
-    }
-
-    function closeCameraModal() {
-      if (activeCameraStream) {
-        activeCameraStream.getTracks().forEach(track => track.stop());
-        activeCameraStream = null;
-      }
-      document.getElementById("cameraModal").classList.add("hidden");
-    }
-
-    function setAttachment(dataUrl, name, type) {
-      currentAttachment.fileData = dataUrl;
-      currentAttachment.fileName = name;
-      currentAttachment.fileType = type;
-
-      document.getElementById("previewImage").src = dataUrl;
-      document.getElementById("previewFileName").innerText = name;
-      document.getElementById("previewContainer").classList.remove("hidden");
-    }
-
-    function clearAttachment() {
-      currentAttachment = { fileData: null, fileName: "", fileType: "" };
-      document.getElementById("fileInput").value = "";
-      document.getElementById("cameraMobileInput").value = "";
-      document.getElementById("previewContainer").classList.add("hidden");
     }
 
     function handleSearch(query) {
@@ -376,72 +332,51 @@
       var q = query.toLowerCase().trim();
       var matches = employeeData.filter(function(emp) {
         return (emp.nama && emp.nama.toLowerCase().indexOf(q) !== -1) || 
-               (emp.nik && emp.nik.toLowerCase().indexOf(q) !== -1) || 
-               (emp.email && emp.email.toLowerCase().indexOf(q) !== -1);
+               (emp.nik && emp.nik.toLowerCase().indexOf(q) !== -1);
       });
 
       listContainer.innerHTML = "";
       if (matches.length === 0) {
-        var emptyDiv = document.createElement("div");
-        emptyDiv.className = "p-3 text-xs text-gray-400 text-center";
-        emptyDiv.textContent = "Data tidak ditemukan (isi manual diizinkan)";
-        listContainer.appendChild(emptyDiv);
-        listContainer.classList.remove("hidden");
+        listContainer.classList.add("hidden");
         return;
       }
 
       matches.forEach(function(emp) {
         var item = document.createElement("div");
         item.className = "p-3 hover:bg-indigo-50 cursor-pointer transition flex items-center justify-between border-b border-gray-100 last:border-0";
-        item.innerHTML = `<div><div class="text-sm font-semibold text-gray-800">${emp.nama}</div><div class="text-xs text-gray-500">${emp.dept || "-"} • ${emp.email || "-"}</div></div><span class="text-xs bg-gray-100 font-mono text-gray-600 px-2 py-0.5 rounded">${emp.nik || "ID"}</span>`;
+        item.innerHTML = `<div><div class="text-sm font-semibold text-gray-800">${emp.nama}</div><div class="text-xs text-gray-500">${emp.dept || "-"}</div></div><span class="text-xs bg-gray-100 font-mono text-gray-600 px-2 py-0.5 rounded">${emp.nik || "ID"}</span>`;
         item.addEventListener("click", function() {
-          selectEmployee(emp.nama, emp.nik, emp.dept, emp.email);
+          selectEmployee(emp.nama, emp.dept, emp.email);
         });
         listContainer.appendChild(item);
       });
       listContainer.classList.remove("hidden");
     }
 
-    function selectEmployee(nama, nik, dept, email) {
-      document.getElementById("employeeInput").value = nama + (nik ? " (" + nik + ")" : "");
-      document.getElementById("emailInput").value = email || "";
-      var deptSelect = document.getElementById("deptSelect");
-      if (dept) {
-        for (var i = 0; i < deptSelect.options.length; i++) {
-          if (deptSelect.options[i].value.toLowerCase().indexOf(dept.toLowerCase()) !== -1) {
-            deptSelect.selectedIndex = i;
-            break;
-          }
-        }
-      }
-      document.getElementById("badgeName").innerText = nama + (nik ? " - " + nik : "");
-      document.getElementById("badgeDetails").innerText = (dept || "-") + " | " + (email || "-");
-      document.getElementById("selectedEmployeeBadge").classList.remove("hidden");
+    function selectEmployee(nama, dept, email) {
+      document.getElementById("pemohonDeptInput").value = nama + " (" + (dept || "General") + ")";
+      document.getElementById("pemohonInput").value = nama;
+      document.getElementById("emailHidden").value = email || "";
       document.getElementById("autocompleteList").classList.add("hidden");
     }
 
     document.addEventListener("click", function(e) {
-      if (!e.target.closest("#employeeInput") && !e.target.closest("#autocompleteList")) {
+      if (!e.target.closest("#pemohonDeptInput") && !e.target.closest("#autocompleteList")) {
         document.getElementById("autocompleteList").classList.add("hidden");
       }
     });
 
     function resetFormView() {
-      document.getElementById("repairForm").reset();
-      document.getElementById("repairForm").classList.remove("hidden");
+      document.getElementById("perbaikanForm").reset();
+      document.getElementById("perbaikanForm").classList.remove("hidden");
       document.getElementById("successModal").classList.add("hidden");
-      clearAttachment();
-      document.getElementById("selectedEmployeeBadge").classList.add("hidden");
+      var today = new Date().toISOString().split('T')[0];
+      document.getElementById("tglPelaksanaInput").value = today;
     }
 
-    document.getElementById("repairForm").addEventListener("submit", async function(e) {
+    // Submit handler
+    document.getElementById("perbaikanForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-
-      if (!currentAttachment.fileData) {
-        alert("⚠️ Bukti Foto / Layar error WAJIB dilampirkan sebelum mengirim pengajuan perbaikan!");
-        document.getElementById("attachmentSection").scrollIntoView({ behavior: 'smooth' });
-        return;
-      }
 
       var btn = document.getElementById("btnSubmit");
       var btnText = document.getElementById("btnText");
@@ -453,16 +388,44 @@
 
       var formData = new FormData(this);
       var dataObj = {};
-      formData.forEach(function(val, key) { dataObj[key] = val; });
 
-      dataObj["Jenis pengajuan"] = "Form Pengajuan Perbaikan IT";
-      if (dataObj["Kategori kendala"] === "Yang lain:" && document.getElementById("inputPerangkatLainnya").value.trim()) {
-        dataObj["Kategori kendala"] = document.getElementById("inputPerangkatLainnya").value.trim();
+      // Handle Checkboxes untuk Nama Barang
+      var namaBarangArr = [];
+      document.querySelectorAll("input[name='Nama Barang']:checked").forEach(function(el) {
+        namaBarangArr.push(el.value);
+      });
+      if (document.getElementById("chkBarangLain").checked && document.getElementById("inputBarangLain").value.trim()) {
+        namaBarangArr.push(document.getElementById("inputBarangLain").value.trim());
       }
+      dataObj["Nama Barang"] = namaBarangArr.join(", ");
 
-      dataObj.fileName = currentAttachment.fileName;
-      dataObj.fileType = currentAttachment.fileType;
-      dataObj.fileData = currentAttachment.fileData;
+      // Handle Checkboxes untuk Jenis Pekerjaan
+      var jenisPekerjaanArr = [];
+      document.querySelectorAll("input[name='Jenis Pekerjaan']:checked").forEach(function(el) {
+        jenisPekerjaanArr.push(el.value);
+      });
+      dataObj["Jenis Pekerjaan"] = jenisPekerjaanArr.join(", ");
+
+      // Handle Checkboxes untuk Estimasi Waktu
+      var estimasiArr = [];
+      document.querySelectorAll("input[name='Estimasi waktu perbaikan']:checked").forEach(function(el) {
+        estimasiArr.push(el.value);
+      });
+      if (document.getElementById("chkWaktuLain").checked && document.getElementById("inputWaktuLain").value.trim()) {
+        estimasiArr.push(document.getElementById("inputWaktuLain").value.trim());
+      }
+      dataObj["Estimasi waktu perbaikan"] = estimasiArr.join(", ");
+
+      // Input teks lainnya
+      dataObj["Nama Lengkap Pemohon (Departemen Pemohon)"] = document.getElementById("pemohonDeptInput").value;
+      dataObj["Tipe"] = formData.get("Tipe") || "";
+      dataObj["Keluhan"] = formData.get("Keluhan") || "";
+      dataObj["Keterangan"] = formData.get("Keterangan") || "";
+      dataObj["Tanggal Pelaksana"] = formData.get("Tanggal Pelaksana") || "";
+      dataObj["Pemohon"] = formData.get("Pemohon") || "";
+      dataObj["Atasan Pemohon"] = formData.get("Atasan Pemohon") || "";
+      dataObj["Email Pelapor"] = document.getElementById("emailHidden").value || "";
+      dataObj["Jenis pengajuan"] = "Form pengajuan perbaikan IT";
 
       try {
         const response = await fetch(API_URL, {
@@ -472,7 +435,7 @@
         const res = await response.json();
         if (res.status === "success") {
           document.getElementById("displayTicketId").innerText = res.ticketId;
-          document.getElementById("repairForm").classList.add("hidden");
+          document.getElementById("perbaikanForm").classList.add("hidden");
           document.getElementById("successModal").classList.remove("hidden");
         } else {
           alert("Error: " + res.message);
@@ -481,7 +444,7 @@
         alert("Gagal mengirim pengajuan. Periksa koneksi internet Anda.");
       } finally {
         btn.disabled = false;
-        btnText.innerText = "Kirim Pengajuan Perbaikan";
+        btnText.innerText = "Kirim Pengajuan Perbaikan IT";
         btnSpinner.classList.add("hidden");
       }
     });
