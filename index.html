@@ -315,32 +315,63 @@
   </div>
 
   <script>
-    // URL Web App Resmi
     const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
+    const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
 
     var employeeData = [];
     var currentAttachment = { fileData: null, fileName: "", fileType: "" };
     var activeCameraStream = null;
 
-    // Callback khusus JSONP
-    window.setEmployeeCallback = function(data) {
-      if (Array.isArray(data) && data.length > 0) {
-        employeeData = data;
-        console.log("Data karyawan termuat:", employeeData.length);
+    // DUAL ENGINE LOADER: Membaca Langsung dari Google Spreadsheet
+    async function loadAllEmployees() {
+      // 1. ENGINE 1: Google Sheet GViz API (Langsung Realtime dari Sheet DATA USER)
+      try {
+        var gvizUrl = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json&sheet=DATA%20USER";
+        var res = await fetch(gvizUrl);
+        var text = await res.text();
+        var jsonText = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        var data = JSON.parse(jsonText);
+
+        if (data && data.table && data.table.rows) {
+          var list = [];
+          data.table.rows.forEach(function(row) {
+            var c = row.c;
+            if (c) {
+              var nik = (c[0] && c[0].v !== null) ? String(c[0].v).trim() : "";
+              var nama = (c[1] && c[1].v !== null) ? String(c[1].v).trim() : "";
+              var dept = (c[2] && c[2].v !== null) ? String(c[2].v).trim() : "";
+              var email = (c[3] && c[3].v !== null) ? String(c[3].v).trim() : "";
+
+              if (nama || nik || email) {
+                list.push({ nik: nik, nama: nama, dept: dept, email: email });
+              }
+            }
+          });
+
+          if (list.length > 0) {
+            employeeData = list;
+            console.log("✓ Berhasil memuat " + employeeData.length + " karyawan via Google Live Sheet!");
+            return;
+          }
+        }
+      } catch (err) {
+        console.log("GViz info:", err);
       }
-    };
 
+      // 2. ENGINE 2: Fallback Apps Script API
+      try {
+        var res2 = await fetch(API_URL);
+        var list2 = await res2.json();
+        if (Array.isArray(list2) && list2.length > 0) {
+          employeeData = list2;
+          console.log("✓ Berhasil memuat via Apps Script Backend:", employeeData.length);
+        }
+      } catch (e) {}
+    }
+
+    // Eksekusi pemuatan data seketika
     window.addEventListener("DOMContentLoaded", function() {
-      // 1. Jalur JSONP (Bebas Blokir)
-      var script = document.createElement("script");
-      script.src = API_URL + "?callback=setEmployeeCallback";
-      document.body.appendChild(script);
-
-      // 2. Jalur Fetch Cadangan
-      fetch(API_URL)
-        .then(res => res.json())
-        .then(data => { if (Array.isArray(data) && data.length > 0) employeeData = data; })
-        .catch(function() {});
+      loadAllEmployees();
     });
 
     function handleFileSelect(event) {
