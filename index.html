@@ -315,17 +315,32 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_II5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
+    // URL Web App Resmi
+    const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
 
     var employeeData = [];
     var currentAttachment = { fileData: null, fileName: "", fileType: "" };
     var activeCameraStream = null;
 
+    // Callback khusus JSONP
+    window.setEmployeeCallback = function(data) {
+      if (Array.isArray(data) && data.length > 0) {
+        employeeData = data;
+        console.log("Data karyawan termuat:", employeeData.length);
+      }
+    };
+
     window.addEventListener("DOMContentLoaded", function() {
+      // 1. Jalur JSONP (Bebas Blokir)
+      var script = document.createElement("script");
+      script.src = API_URL + "?callback=setEmployeeCallback";
+      document.body.appendChild(script);
+
+      // 2. Jalur Fetch Cadangan
       fetch(API_URL)
         .then(res => res.json())
-        .then(data => { employeeData = data || []; })
-        .catch(err => console.log("Gagal memuat data karyawan:", err));
+        .then(data => { if (Array.isArray(data) && data.length > 0) employeeData = data; })
+        .catch(function() {});
     });
 
     function handleFileSelect(event) {
@@ -509,7 +524,7 @@
       e.preventDefault();
 
       if (!currentAttachment.fileData) {
-        alert("⚠️ Lampiran Foto / Screenshot bukti kendala WAJIB dilampirkan sebelum mengirim tiket!");
+        alert("⚠️ Bukti Foto / Screenshot kendala WAJIB dilampirkan sebelum mengirim tiket!");
         document.getElementById("attachmentSection").scrollIntoView({ behavior: 'smooth' });
         return;
       }
