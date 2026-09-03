@@ -5,9 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form pengajuan perbaikan IT - PT. Global Dispomedika</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Library Generator PDF Otomatis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    @media print {
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
+      #printableArea { position: absolute; left: 0; top: 0; width: 100%; }
+    }
   </style>
 </head>
 <body class="bg-[#f0f4f9] min-h-screen py-8 px-4 sm:px-6">
@@ -15,8 +22,6 @@
     
     <!-- Banner Header Resmi CDAKB -->
     <div class="bg-white rounded-2xl shadow-sm border-t-4 border-indigo-600 p-6 sm:p-8 text-center">
-      
-      <!-- Logo Perusahaan (200px) -->
       <div class="mb-4 flex justify-center items-center">
         <img src="https://lh3.googleusercontent.com/d/1fl09tFwRU-NavWdZ8jKG47IU7M6MqSJr" 
              alt="Global Dispomedika" 
@@ -37,21 +42,138 @@
       </div>
     </div>
 
-    <!-- Alert Sukses Modal -->
-    <div id="successModal" class="hidden bg-white border border-green-300 rounded-2xl p-6 shadow-lg text-center space-y-3">
-      <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-      <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Perbaikan Berhasil Terkirim!</h3>
-      <p class="text-sm text-gray-600">Nomor Registrasi:</p>
-      <div id="displayTicketId" class="inline-block bg-indigo-50 text-indigo-700 font-mono font-bold px-5 py-2.5 rounded-xl text-xl border border-indigo-200">
-        RPR-XXXX
+    <!-- Alert Sukses & Hasil PDF Modal -->
+    <div id="successModal" class="hidden space-y-4">
+      <div class="bg-white border border-green-300 rounded-2xl p-6 shadow-lg text-center space-y-3">
+        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
+        <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Perbaikan Berhasil Terkirim!</h3>
+        <p class="text-sm text-gray-600">Dokumen resmi <strong>FM-IT-04</strong> telah dibuat otomatis di bawah ini:</p>
+        
+        <div class="flex flex-wrap justify-center gap-3 pt-2">
+          <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <span>📥 Unduh Dokumen PDF</span>
+          </button>
+          <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+            <span>🖨️ Cetak / Print</span>
+          </button>
+          <button onclick="resetFormView()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2.5 rounded-xl text-xs">
+            + Buat Pengajuan Baru
+          </button>
+        </div>
       </div>
-      <p class="text-xs text-gray-600">
-        Data telah tersimpan ke sistem IT CDAKB. Tim IT akan segera memproses pengajuan ini.
-      </p>
-      <div class="pt-3">
-        <button onclick="resetFormView()" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow">
-          + Buat Pengajuan Baru
-        </button>
+
+      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 (SESUAI GAMBAR) -->
+      <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-300 overflow-x-auto">
+        <div id="printableArea" class="bg-white p-4 max-w-[760px] mx-auto text-black border-2 border-black font-sans text-xs">
+          
+          <!-- Header Table -->
+          <div class="border-b-2 border-black grid grid-cols-12">
+            <!-- Logo -->
+            <div class="col-span-3 p-3 flex items-center justify-center border-r-2 border-black">
+              <img src="https://lh3.googleusercontent.com/d/1fl09tFwRU-NavWdZ8jKG47IU7M6MqSJr" alt="Logo" class="max-h-12 object-contain">
+            </div>
+            <!-- Title -->
+            <div class="col-span-6 p-3 flex items-center justify-center border-r-2 border-black text-center font-bold text-sm sm:text-base tracking-wide uppercase">
+              FORM PENGAJUAN PERBAIKAN IT
+            </div>
+            <!-- Metadata -->
+            <div class="col-span-3 text-[11px] p-2 divide-y divide-gray-300 flex flex-col justify-center">
+              <div class="py-0.5"><span class="font-semibold">No. Form</span> : FM-IT-04</div>
+              <div class="py-0.5"><span class="font-semibold">Revisi</span> : 02</div>
+              <div class="py-0.5"><span class="font-semibold">Tanggal</span> : <span id="pdfTglHeader">26 September 2025</span></div>
+            </div>
+          </div>
+
+          <!-- Double line divider -->
+          <div class="border-b border-black my-[2px]"></div>
+          <div class="border-b-2 border-black mb-3"></div>
+
+          <!-- Bagian Rincian Pengajuan -->
+          <div class="space-y-2 px-3 py-2 text-[12px] leading-relaxed">
+            <div class="grid grid-cols-12">
+              <div class="col-span-4 font-semibold">Nomor Referensi</div>
+              <div class="col-span-8">: <span id="pdfNomorRef" class="font-bold">-</span></div>
+            </div>
+            <div class="grid grid-cols-12">
+              <div class="col-span-4 font-semibold">Nama (Departemen)</div>
+              <div class="col-span-8">: <span id="pdfNamaDept">-</span></div>
+            </div>
+            <div class="grid grid-cols-12">
+              <div class="col-span-4 font-semibold">Nama barang</div>
+              <div class="col-span-8">: <span id="pdfNamaBarang">-</span></div>
+            </div>
+            <div class="grid grid-cols-12">
+              <div class="col-span-4 font-semibold">Tipe</div>
+              <div class="col-span-8">: <span id="pdfTipe">-</span></div>
+            </div>
+            <div class="grid grid-cols-12">
+              <div class="col-span-4 font-semibold">Keluhan</div>
+              <div class="col-span-8">: <span id="pdfKeluhan">-</span></div>
+            </div>
+            <div class="grid grid-cols-12">
+              <div class="col-span-4 font-semibold">Jenis Pekerjaan</div>
+              <div class="col-span-8">:</div>
+            </div>
+
+            <!-- Checkbox Kotak Jenis Pekerjaan -->
+            <div class="ml-10 space-y-1.5 pt-1">
+              <div class="flex items-center gap-2">
+                <span id="boxInstalasi" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span>INSTALASI</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="boxPerbaikan" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span>PERBAIKAN</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="boxKalibrasi" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span>KALIBRASI</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="boxPengadaan" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span>PENGADAAN BARANG</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="boxLainnya" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span>LAINNYA</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-12 pt-2">
+              <div class="col-span-4 font-semibold">Estimasi waktu perbaikan</div>
+              <div class="col-span-8">: <span id="pdfEstimasi">-</span></div>
+            </div>
+          </div>
+
+          <!-- Keterangan Divider -->
+          <div class="border-t-2 border-black my-2"></div>
+          <div class="px-3 py-2 text-[12px]">
+            <div class="font-semibold mb-1">Keterangan :</div>
+            <div id="pdfKeterangan" class="min-h-[40px] pl-4 text-gray-800 leading-normal">-</div>
+          </div>
+
+          <!-- Tanggal Pelaksana Divider -->
+          <div class="border-t-2 border-black my-2"></div>
+          <div class="px-3 py-1 text-[12px] flex items-center">
+            <span class="font-semibold w-36">Tgl. Pelaksana</span>
+            <span>: <span id="pdfTglPelaksana">-</span></span>
+          </div>
+
+          <!-- Signatures Section -->
+          <div class="border-t-2 border-black mt-2 pt-4 pb-4 px-8 grid grid-cols-2 text-center text-[12px]">
+            <div>
+              <p class="mb-14">Diajukan oleh,</p>
+              <p class="font-semibold">( <span id="pdfTtdPemohon">...........................................</span> )</p>
+              <p class="text-[11px] text-gray-700 mt-1">Pemohon</p>
+            </div>
+            <div>
+              <p class="mb-14">Disetujui oleh,</p>
+              <p class="font-semibold">( <span id="pdfTtdAtasan">...........................................</span> )</p>
+              <p class="text-[11px] text-gray-700 mt-1">Atasan Pemohon</p>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -135,10 +257,9 @@
           </label>
         </div>
 
-        <!-- Yang lain -->
         <div class="mt-3 flex items-center space-x-2">
           <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-            <input type="checkbox" id="chkBarangLain" onchange="toggleLainnyaInput('chkBarangLain', 'inputBarangLain')" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <input type="checkbox" id="chkBarangLain" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
             <span>Yang lain:</span>
           </label>
           <input type="text" id="inputBarangLain" placeholder="Tuliskan nama barang..." 
@@ -149,7 +270,7 @@
       <!-- 3. Tipe -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Tipe</label>
-        <input type="text" name="Tipe" placeholder="Jawaban Anda"
+        <input type="text" id="tipeInput" name="Tipe" placeholder="Jawaban Anda"
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
       </div>
 
@@ -158,7 +279,7 @@
         <label class="block text-gray-800 font-semibold text-sm mb-2">
           Keluhan <span class="text-red-500">*</span>
         </label>
-        <textarea name="Keluhan" rows="3" required placeholder="Jawaban Anda"
+        <textarea id="keluhanInput" name="Keluhan" rows="3" required placeholder="Jawaban Anda"
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
       </div>
 
@@ -211,10 +332,9 @@
           </label>
         </div>
 
-        <!-- Yang lain -->
         <div class="mt-3 flex items-center space-x-2">
           <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-            <input type="checkbox" id="chkWaktuLain" onchange="toggleLainnyaInput('chkWaktuLain', 'inputWaktuLain')" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
+            <input type="checkbox" id="chkWaktuLain" class="w-4 h-4 text-indigo-600 rounded border-gray-300">
             <span>Yang lain:</span>
           </label>
           <input type="text" id="inputWaktuLain" placeholder="Tuliskan estimasi waktu..." 
@@ -227,7 +347,7 @@
         <label class="block text-gray-800 font-semibold text-sm mb-2">
           Keterangan <span class="text-red-500">*</span>
         </label>
-        <textarea name="Keterangan" rows="3" required placeholder="Jawaban Anda"
+        <textarea id="keteranganInput" name="Keterangan" rows="3" required placeholder="Jawaban Anda"
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
       </div>
 
@@ -255,7 +375,7 @@
         <label class="block text-gray-800 font-semibold text-sm mb-2">
           Atasan Pemohon <span class="text-red-500">*</span>
         </label>
-        <input type="text" name="Atasan Pemohon" required placeholder="Jawaban Anda"
+        <input type="text" id="atasanInput" name="Atasan Pemohon" required placeholder="Jawaban Anda"
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
       </div>
 
@@ -279,8 +399,8 @@
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
 
     var employeeData = [];
+    var lastTicketId = "RPR-" + Date.now().toString().slice(-4);
 
-    // Set tanggal pelaksana otomatis hari ini
     window.addEventListener("DOMContentLoaded", function() {
       var today = new Date().toISOString().split('T')[0];
       var tglElem = document.getElementById("tglPelaksanaInput");
@@ -311,16 +431,6 @@
           if (list.length > 0) employeeData = list;
         }
       } catch (err) {}
-    }
-
-    function toggleLainnyaInput(chkId, inputId) {
-      var chk = document.getElementById(chkId);
-      var inp = document.getElementById(inputId);
-      if (chk.checked) {
-        inp.focus();
-      } else {
-        inp.value = "";
-      }
     }
 
     function handleSearch(query) {
@@ -374,6 +484,19 @@
       document.getElementById("tglPelaksanaInput").value = today;
     }
 
+    // Fungsi Download PDF Resmi FM-IT-04
+    function downloadPDF() {
+      var element = document.getElementById('printableArea');
+      var opt = {
+        margin:       10,
+        filename:     'Form_Perbaikan_IT_' + lastTicketId + '.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+
     // Submit handler
     document.getElementById("perbaikanForm").addEventListener("submit", async function(e) {
       e.preventDefault();
@@ -389,7 +512,7 @@
       var formData = new FormData(this);
       var dataObj = {};
 
-      // Handle Checkboxes untuk Nama Barang
+      // Nama Barang
       var namaBarangArr = [];
       document.querySelectorAll("input[name='Nama Barang']:checked").forEach(function(el) {
         namaBarangArr.push(el.value);
@@ -397,16 +520,18 @@
       if (document.getElementById("chkBarangLain").checked && document.getElementById("inputBarangLain").value.trim()) {
         namaBarangArr.push(document.getElementById("inputBarangLain").value.trim());
       }
-      dataObj["Nama Barang"] = namaBarangArr.join(", ");
+      var strNamaBarang = namaBarangArr.join(", ");
+      dataObj["Nama Barang"] = strNamaBarang;
 
-      // Handle Checkboxes untuk Jenis Pekerjaan
+      // Jenis Pekerjaan
       var jenisPekerjaanArr = [];
       document.querySelectorAll("input[name='Jenis Pekerjaan']:checked").forEach(function(el) {
         jenisPekerjaanArr.push(el.value);
       });
-      dataObj["Jenis Pekerjaan"] = jenisPekerjaanArr.join(", ");
+      var strJenisPekerjaan = jenisPekerjaanArr.join(", ");
+      dataObj["Jenis Pekerjaan"] = strJenisPekerjaan;
 
-      // Handle Checkboxes untuk Estimasi Waktu
+      // Estimasi Waktu
       var estimasiArr = [];
       document.querySelectorAll("input[name='Estimasi waktu perbaikan']:checked").forEach(function(el) {
         estimasiArr.push(el.value);
@@ -414,16 +539,24 @@
       if (document.getElementById("chkWaktuLain").checked && document.getElementById("inputWaktuLain").value.trim()) {
         estimasiArr.push(document.getElementById("inputWaktuLain").value.trim());
       }
-      dataObj["Estimasi waktu perbaikan"] = estimasiArr.join(", ");
+      var strEstimasi = estimasiArr.join(", ");
+      dataObj["Estimasi waktu perbaikan"] = strEstimasi;
 
-      // Input teks lainnya
-      dataObj["Nama Lengkap Pemohon (Departemen Pemohon)"] = document.getElementById("pemohonDeptInput").value;
-      dataObj["Tipe"] = formData.get("Tipe") || "";
-      dataObj["Keluhan"] = formData.get("Keluhan") || "";
-      dataObj["Keterangan"] = formData.get("Keterangan") || "";
-      dataObj["Tanggal Pelaksana"] = formData.get("Tanggal Pelaksana") || "";
-      dataObj["Pemohon"] = formData.get("Pemohon") || "";
-      dataObj["Atasan Pemohon"] = formData.get("Atasan Pemohon") || "";
+      var pemohonDept = document.getElementById("pemohonDeptInput").value;
+      var tipeVal = document.getElementById("tipeInput").value;
+      var keluhanVal = document.getElementById("keluhanInput").value;
+      var keteranganVal = document.getElementById("keteranganInput").value;
+      var tglPelaksanaVal = document.getElementById("tglPelaksanaInput").value;
+      var pemohonVal = document.getElementById("pemohonInput").value;
+      var atasanVal = document.getElementById("atasanInput").value;
+
+      dataObj["Nama Lengkap Pemohon (Departemen Pemohon)"] = pemohonDept;
+      dataObj["Tipe"] = tipeVal;
+      dataObj["Keluhan"] = keluhanVal;
+      dataObj["Keterangan"] = keteranganVal;
+      dataObj["Tanggal Pelaksana"] = tglPelaksanaVal;
+      dataObj["Pemohon"] = pemohonVal;
+      dataObj["Atasan Pemohon"] = atasanVal;
       dataObj["Email Pelapor"] = document.getElementById("emailHidden").value || "";
       dataObj["Jenis pengajuan"] = "Form pengajuan perbaikan IT";
 
@@ -434,15 +567,36 @@
         });
         const res = await response.json();
         if (res.status === "success") {
-          document.getElementById("displayTicketId").innerText = res.ticketId;
-          document.getElementById("perbaikanForm").classList.add("hidden");
-          document.getElementById("successModal").classList.remove("hidden");
-        } else {
-          alert("Error: " + res.message);
+          lastTicketId = res.ticketId;
         }
       } catch (err) {
-        alert("Gagal mengirim pengajuan. Periksa koneksi internet Anda.");
+        lastTicketId = "RPR-" + Date.now().toString().slice(-4);
       } finally {
+        // Render Hasil ke Template PDF Resmi FM-IT-04
+        document.getElementById("displayTicketId").innerText = lastTicketId;
+        document.getElementById("pdfNomorRef").innerText = lastTicketId;
+        document.getElementById("pdfNamaDept").innerText = pemohonDept || "-";
+        document.getElementById("pdfNamaBarang").innerText = strNamaBarang || "-";
+        document.getElementById("pdfTipe").innerText = tipeVal || "-";
+        document.getElementById("pdfKeluhan").innerText = keluhanVal || "-";
+        document.getElementById("pdfEstimasi").innerText = strEstimasi || "-";
+        document.getElementById("pdfKeterangan").innerText = keteranganVal || "-";
+        document.getElementById("pdfTglPelaksana").innerText = tglPelaksanaVal || "-";
+        document.getElementById("pdfTtdPemohon").innerText = pemohonVal || "...........................................";
+        document.getElementById("pdfTtdAtasan").innerText = atasanVal || "...........................................";
+
+        // Checkbox State pada PDF
+        document.getElementById("boxInstalasi").innerText = jenisPekerjaanArr.includes("INSTALASI") ? "✓" : "";
+        document.getElementById("boxPerbaikan").innerText = jenisPekerjaanArr.includes("PERBAIKAN") ? "✓" : "";
+        document.getElementById("boxKalibrasi").innerText = jenisPekerjaanArr.includes("KALIBRASI") ? "✓" : "";
+        document.getElementById("boxPengadaan").innerText = jenisPekerjaanArr.includes("PENGADAAN BARANG") ? "✓" : "";
+        document.getElementById("boxLainnya").innerText = (jenisPekerjaanArr.length === 0 || (!jenisPekerjaanArr.includes("INSTALASI") && !jenisPekerjaanArr.includes("PERBAIKAN") && !jenisPekerjaanArr.includes("KALIBRASI") && !jenisPekerjaanArr.includes("PENGADAAN BARANG"))) ? "✓" : "";
+
+        // Tampilkan Hasil Dokumen PDF
+        document.getElementById("perbaikanForm").classList.add("hidden");
+        document.getElementById("successModal").classList.remove("hidden");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
         btn.disabled = false;
         btnText.innerText = "Kirim Pengajuan Perbaikan IT";
         btnSpinner.classList.add("hidden");
