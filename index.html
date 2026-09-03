@@ -120,10 +120,10 @@
         </select>
       </div>
 
-      <!-- 4. Jenis Pengajuan (Sesuai Google Form) -->
+      <!-- 4. Jenis Pengajuan (Dengan Redirect Aset IT) -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis pengajuan <span class="text-red-500">*</span></label>
-        <select name="Jenis pengajuan" required class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+        <select id="selectJenisPengajuan" name="Jenis pengajuan" required onchange="handleJenisPengajuanChange(this.value)" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
           <option value="" disabled selected>Pilih</option>
           <option value="Kendala / Gangguan">Kendala / Gangguan</option>
           <option value="Permintaan Layanan">Permintaan Layanan</option>
@@ -132,216 +132,239 @@
           <option value="Keamanan Informasi">Keamanan Informasi</option>
           <option value="Pengelolaan Aset IT">Pengelolaan Aset IT</option>
         </select>
-      </div>
 
-      <!-- 5. Tingkat Urgensi (Sesuai Google Form: Low, Medium, High, Critical) -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-3">Tingkat urgensi <span class="text-red-500">*</span></label>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
-            <input type="radio" name="Tingkat urgensi" value="Low" required class="mb-1 text-indigo-600">
-            <span class="text-xs font-semibold text-gray-700">Low</span>
-          </label>
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
-            <input type="radio" name="Tingkat urgensi" value="Medium" class="mb-1 text-indigo-600">
-            <span class="text-xs font-semibold text-gray-700">Medium</span>
-          </label>
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
-            <input type="radio" name="Tingkat urgensi" value="High" class="mb-1 text-indigo-600">
-            <span class="text-xs font-semibold text-orange-600">High</span>
-          </label>
-          <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-red-400 has-[:checked]:border-red-600 has-[:checked]:bg-red-50/50">
-            <input type="radio" name="Tingkat urgensi" value="Critical" class="mb-1 text-red-600">
-            <span class="text-xs font-semibold text-red-600">Critical</span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 6. Kategori Kendala (Sesuai Google Form) -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-2">Kategori kendala <span class="text-red-500">*</span></label>
-        <select id="kategoriSelect" name="Kategori kendala" required onchange="handleCategoryChange()" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="" disabled selected>-- Pilih Kategori Kendala --</option>
-          <option value="Hardware">Hardware</option>
-          <option value="Software">Software</option>
-          <option value="Jaringan">Jaringan</option>
-          <option value="Akun dan keamanan">Akun dan keamanan</option>
-        </select>
-      </div>
-
-      <!-- Sub Kategori: Hardware -->
-      <div id="secHardware" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
-        <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis hardware apa yang mengalami kendala?</label>
-        <select id="selectHardware" name="Jenis hardware apa yang mengalami kendala?" onchange="handleSubOther('selectHardware', 'extraHardwareLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="">-- Pilih Jenis Hardware --</option>
-          <option value="PC / Komputer">PC / Komputer</option>
-          <option value="Laptop">Laptop</option>
-          <option value="Printer / Scanner">Printer / Scanner</option>
-          <option value="Monitor">Monitor</option>
-          <option value="Barcode Scanner">Barcode Scanner</option>
-          <option value="Keyboard / Mouse">Keyboard / Mouse</option>
-          <option value="UPS / Power Supply">UPS / Power Supply</option>
-          <option value="Yang lain:">Yang lain:</option>
-        </select>
-        
-        <div id="extraHardwareLainnya" class="hidden mt-3">
-          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian lainnya:</label>
-          <input type="text" id="inputHardwareLainnya" placeholder="Contoh: Switch Hub, Kabel HDMI, Proyektor, Mesin Fax, dll."
-            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
-        </div>
-      </div>
-
-      <!-- Sub Kategori: Software (Sesuai Google Form Bagian 3) -->
-      <div id="secSoftware" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500 space-y-4">
-        <div>
-          <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis software apa yang mengalami kendala? <span class="text-red-500">*</span></label>
-          <select id="selectSoftware" name="Jenis software apa yang mengalami kendala?" onchange="handleSubOther('selectSoftware', 'extraSoftwareLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-            <option value="" disabled selected>-- Pilih Jenis Software --</option>
-            <option value="OS">OS</option>
-            <option value="Office">Office</option>
-            <option value="Outlook Email">Outlook Email</option>
-            <option value="VPN">VPN</option>
-            <option value="Accurate System">Accurate System</option>
-            <option value="Browser">Browser</option>
-            <option value="Antivirus">Antivirus</option>
-            <option value="Meeting Apps">Meeting Apps</option>
-            <option value="Yang lain:">Yang lain:</option>
-          </select>
-          
-          <div id="extraSoftwareLainnya" class="hidden mt-3">
-            <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian software lainnya:</label>
-            <input type="text" id="inputSoftwareLainnya" placeholder="Sebutkan jenis software / aplikasi..."
-              class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis isu <span class="text-red-500">*</span></label>
-          <select id="selectJenisIsu" name="Jenis isu" onchange="handleSubOther('selectJenisIsu', 'extraJenisIsuLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-            <option value="" disabled selected>-- Pilih Jenis Isu --</option>
-            <option value="Tidak Bisa Login">Tidak Bisa Login</option>
-            <option value="Crash">Crash</option>
-            <option value="Lambat">Lambat</option>
-            <option value="Error Message">Error Message</option>
-            <option value="Tidak Bisa Install">Tidak Bisa Install</option>
-            <option value="Tidak Bisa Update">Tidak Bisa Update</option>
-            <option value="Sync Gagal">Sync Gagal</option>
-            <option value="Tidak Bisa Connect">Tidak Bisa Connect</option>
-            <option value="Yang lain:">Yang lain:</option>
-          </select>
-          
-          <div id="extraJenisIsuLainnya" class="hidden mt-3">
-            <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian isu lainnya:</label>
-            <input type="text" id="inputJenisIsuLainnya" placeholder="Sebutkan jenis isu kendala..."
-              class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
-          </div>
-        </div>
-      </div>
-
-      <!-- Sub Kategori: Jaringan (Sesuai Google Form Bagian 4) -->
-      <div id="secJaringan" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
-        <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis jaringan apa yang mengalami kendala? <span class="text-red-500">*</span></label>
-        <select id="selectJaringan" name="Jenis jaringan apa yang mengalami kendala?" onchange="handleSubOther('selectJaringan', 'extraJaringanLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="" disabled selected>-- Pilih Kendala Jaringan --</option>
-          <option value="Wifi terputus">Wifi terputus</option>
-          <option value="Wifi tersambung, namun tidak ada internet">Wifi tersambung, namun tidak ada internet</option>
-          <option value="LAN terputus">LAN terputus</option>
-          <option value="LAN tersambung, namun tidak ada internet">LAN tersambung, namun tidak ada internet</option>
-          <option value="VPN tidak dapat terkoneksi">VPN tidak dapat terkoneksi</option>
-          <option value="Yang lain:">Yang lain:</option>
-        </select>
-        
-        <div id="extraJaringanLainnya" class="hidden mt-3">
-          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian lainnya:</label>
-          <input type="text" id="inputJaringanLainnya" placeholder="Tuliskan kendala jaringan Anda..."
-            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
-        </div>
-      </div>
-
-      <!-- Sub Kategori: Akun dan Keamanan (Sesuai Google Form Bagian 5) -->
-      <div id="secAkun" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
-        <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis Akun dan keamanan apa yang mengalami kendala? <span class="text-red-500">*</span></label>
-        <select id="selectAkun" name="Jenis Akun dan keamanan apa yang mengalami kendala?" onchange="handleSubOther('selectAkun', 'extraAkunLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="" disabled selected>-- Pilih Kendala Akun / Keamanan --</option>
-          <option value="Lupa password">Lupa password</option>
-          <option value="Spam email">Spam email</option>
-          <option value="Login mencurigakan">Login mencurigakan</option>
-          <option value="Antivirus mendeteksi malware">Antivirus mendeteksi malware</option>
-          <option value="Yang lain:">Yang lain:</option>
-        </select>
-        
-        <div id="extraAkunLainnya" class="hidden mt-3">
-          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian lainnya:</label>
-          <input type="text" id="inputAkunLainnya" placeholder="Tuliskan kendala akun / keamanan Anda..."
-            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
-        </div>
-      </div>
-
-      <!-- 7. BAGIAN 6 DARI 6: DETAIL KRONOLOGI & BUKTI -->
-      <!-- Lampiran Foto/Screenshot (Upload File): Bukti layar error atau kerusakan fisik -->
-      <div id="attachmentSection" class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <div class="flex items-center justify-between mb-1">
-          <label class="block text-gray-800 font-semibold text-sm">
-            Lampiran Foto/Screenshot (Upload File): Bukti layar error atau kerusakan fisik. <span class="text-red-500 font-bold">*</span>
-          </label>
-        </div>
-        <p class="text-xs text-gray-500 mb-4">Pilih foto dari galeri/file komputer ATAU ambil foto langsung menggunakan kamera</p>
-        
-        <input type="file" id="fileInput" accept="image/*,.pdf" onchange="handleFileSelect(event)" class="hidden">
-        <input type="file" id="cameraMobileInput" accept="image/*" capture="environment" onchange="handleFileSelect(event)" class="hidden">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
-          <button type="button" onclick="document.getElementById('fileInput').click()"
-            class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-100/50 text-indigo-700 text-sm font-semibold transition">
-            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            <span>Pilih Dari File / Galeri</span>
-          </button>
-
-          <button type="button" onclick="openCameraModal()"
-            class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl border-2 border-indigo-600 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-            <span>Ambil Foto Langsung</span>
-          </button>
-        </div>
-
-        <div id="previewContainer" class="hidden p-3 bg-gray-50 border border-gray-200 rounded-xl mt-3 flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <img id="previewImage" src="" alt="Preview" class="w-14 h-14 object-cover rounded-lg border border-gray-300">
+        <!-- Kotak Banner Pengalihan Khusus Pengelolaan Aset IT -->
+        <div id="boxPengelolaanAset" class="hidden mt-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-base shadow">📋</div>
             <div>
-              <div id="previewFileName" class="text-xs font-bold text-gray-800 truncate max-w-[180px] sm:max-w-[280px]">Foto_Bukti.jpg</div>
-              <div class="text-[11px] text-green-600 font-semibold">✓ Foto siap dilampirkan</div>
+              <h4 class="text-sm font-bold text-indigo-900">Formulir Khusus Pengelolaan Aset IT</h4>
+              <p class="text-xs text-indigo-700 mt-0.5 leading-relaxed">
+                Pengajuan Pengelolaan Aset IT diproses melalui formulir terpisah. Tab formulir telah dibuka otomatis. Anda juga dapat mengklik tombol di bawah jika tab belum terbuka.
+              </p>
             </div>
           </div>
-          <button type="button" onclick="clearAttachment()" class="text-xs text-red-600 hover:text-red-800 font-semibold px-2 py-1 bg-red-50 hover:bg-red-100 rounded-lg">
-            Hapus / Ganti
-          </button>
+          <a href="https://docs.google.com/forms/d/135dYnKlb-5MJkL1Pg-SNQn3gTuc4S_lVAANXz9ewxtw/viewform" target="_blank"
+             class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow transition">
+            <span>Buka Formulir Pengelolaan Aset IT</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </a>
         </div>
       </div>
 
-      <!-- Deskripsi Kendala (Teks Jawaban Panjang) -->
-      <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
-        <label class="block text-gray-800 font-semibold text-sm mb-1">
-          Deskripsi Kendala <span class="text-red-500">*</span>
-        </label>
-        <p class="text-xs text-gray-400 mb-2">Teks jawaban panjang</p>
-        <textarea name="Deskripsi Kendala" rows="4" required placeholder="Jelaskan secara rinci kronologi kendala atau spesifikasi permintaan Anda..." class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
-      </div>
+      <!-- KONTEN FORMULIR REGULER (Otomatis tersembunyi jika pilih Pengelolaan Aset IT) -->
+      <div id="regularFormFields" class="space-y-4">
+        <!-- 5. Tingkat Urgensi -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+          <label class="block text-gray-800 font-semibold text-sm mb-3">Tingkat urgensi <span class="text-red-500">*</span></label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="radio" name="Tingkat urgensi" value="Low" required class="mb-1 text-indigo-600">
+              <span class="text-xs font-semibold text-gray-700">Low</span>
+            </label>
+            <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="radio" name="Tingkat urgensi" value="Medium" class="mb-1 text-indigo-600">
+              <span class="text-xs font-semibold text-gray-700">Medium</span>
+            </label>
+            <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-indigo-400 has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50/50">
+              <input type="radio" name="Tingkat urgensi" value="High" class="mb-1 text-indigo-600">
+              <span class="text-xs font-semibold text-orange-600">High</span>
+            </label>
+            <label class="border border-gray-200 p-3 rounded-xl flex flex-col items-center cursor-pointer hover:border-red-400 has-[:checked]:border-red-600 has-[:checked]:bg-red-50/50">
+              <input type="radio" name="Tingkat urgensi" value="Critical" class="mb-1 text-red-600">
+              <span class="text-xs font-semibold text-red-600">Critical</span>
+            </label>
+          </div>
+        </div>
 
-      <!-- Submit Button -->
-      <div class="flex items-center justify-between pt-2">
-        <button type="submit" id="btnSubmit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-md transition text-sm flex items-center space-x-2">
-          <span id="btnText">Kirim Tiket Permintaan</span>
-          <svg id="btnSpinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-          </svg>
-        </button>
-        <button type="reset" onclick="handleReset()" class="text-gray-500 hover:text-gray-700 text-sm font-medium px-4 py-2">Kosongkan</button>
+        <!-- 6. Kategori Kendala -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+          <label class="block text-gray-800 font-semibold text-sm mb-2">Kategori kendala <span class="text-red-500">*</span></label>
+          <select id="kategoriSelect" name="Kategori kendala" required onchange="handleCategoryChange()" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+            <option value="" disabled selected>-- Pilih Kategori Kendala --</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Software">Software</option>
+            <option value="Jaringan">Jaringan</option>
+            <option value="Akun dan keamanan">Akun dan keamanan</option>
+          </select>
+        </div>
+
+        <!-- Sub Kategori: Hardware -->
+        <div id="secHardware" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
+          <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis hardware apa yang mengalami kendala?</label>
+          <select id="selectHardware" name="Jenis hardware apa yang mengalami kendala?" onchange="handleSubOther('selectHardware', 'extraHardwareLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+            <option value="">-- Pilih Jenis Hardware --</option>
+            <option value="PC / Komputer">PC / Komputer</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Printer / Scanner">Printer / Scanner</option>
+            <option value="Monitor">Monitor</option>
+            <option value="Barcode Scanner">Barcode Scanner</option>
+            <option value="Keyboard / Mouse">Keyboard / Mouse</option>
+            <option value="UPS / Power Supply">UPS / Power Supply</option>
+            <option value="Yang lain:">Yang lain:</option>
+          </select>
+          
+          <div id="extraHardwareLainnya" class="hidden mt-3">
+            <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian lainnya:</label>
+            <input type="text" id="inputHardwareLainnya" placeholder="Contoh: Switch Hub, Kabel HDMI, Proyektor, Mesin Fax, dll."
+              class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+          </div>
+        </div>
+
+        <!-- Sub Kategori: Software (Sesuai Google Form Bagian 3) -->
+        <div id="secSoftware" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500 space-y-4">
+          <div>
+            <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis software apa yang mengalami kendala? <span class="text-red-500">*</span></label>
+            <select id="selectSoftware" name="Jenis software apa yang mengalami kendala?" onchange="handleSubOther('selectSoftware', 'extraSoftwareLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+              <option value="" disabled selected>-- Pilih Jenis Software --</option>
+              <option value="OS">OS</option>
+              <option value="Office">Office</option>
+              <option value="Outlook Email">Outlook Email</option>
+              <option value="VPN">VPN</option>
+              <option value="Accurate System">Accurate System</option>
+              <option value="Browser">Browser</option>
+              <option value="Antivirus">Antivirus</option>
+              <option value="Meeting Apps">Meeting Apps</option>
+              <option value="Yang lain:">Yang lain:</option>
+            </select>
+            
+            <div id="extraSoftwareLainnya" class="hidden mt-3">
+              <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian software lainnya:</label>
+              <input type="text" id="inputSoftwareLainnya" placeholder="Sebutkan jenis software / aplikasi..."
+                class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis isu <span class="text-red-500">*</span></label>
+            <select id="selectJenisIsu" name="Jenis isu" onchange="handleSubOther('selectJenisIsu', 'extraJenisIsuLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+              <option value="" disabled selected>-- Pilih Jenis Isu --</option>
+              <option value="Tidak Bisa Login">Tidak Bisa Login</option>
+              <option value="Crash">Crash</option>
+              <option value="Lambat">Lambat</option>
+              <option value="Error Message">Error Message</option>
+              <option value="Tidak Bisa Install">Tidak Bisa Install</option>
+              <option value="Tidak Bisa Update">Tidak Bisa Update</option>
+              <option value="Sync Gagal">Sync Gagal</option>
+              <option value="Tidak Bisa Connect">Tidak Bisa Connect</option>
+              <option value="Yang lain:">Yang lain:</option>
+            </select>
+            
+            <div id="extraJenisIsuLainnya" class="hidden mt-3">
+              <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian isu lainnya:</label>
+              <input type="text" id="inputJenisIsuLainnya" placeholder="Sebutkan jenis isu kendala..."
+                class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub Kategori: Jaringan (Sesuai Google Form Bagian 4) -->
+        <div id="secJaringan" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
+          <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis jaringan apa yang mengalami kendala? <span class="text-red-500">*</span></label>
+          <select id="selectJaringan" name="Jenis jaringan apa yang mengalami kendala?" onchange="handleSubOther('selectJaringan', 'extraJaringanLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+            <option value="" disabled selected>-- Pilih Kendala Jaringan --</option>
+            <option value="Wifi terputus">Wifi terputus</option>
+            <option value="Wifi tersambung, namun tidak ada internet">Wifi tersambung, namun tidak ada internet</option>
+            <option value="LAN terputus">LAN terputus</option>
+            <option value="LAN tersambung, namun tidak ada internet">LAN tersambung, namun tidak ada internet</option>
+            <option value="VPN tidak dapat terkoneksi">VPN tidak dapat terkoneksi</option>
+            <option value="Yang lain:">Yang lain:</option>
+          </select>
+          
+          <div id="extraJaringanLainnya" class="hidden mt-3">
+            <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian lainnya:</label>
+            <input type="text" id="inputJaringanLainnya" placeholder="Tuliskan kendala jaringan Anda..."
+              class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+          </div>
+        </div>
+
+        <!-- Sub Kategori: Akun dan Keamanan (Sesuai Google Form Bagian 5) -->
+        <div id="secAkun" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
+          <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis Akun dan keamanan apa yang mengalami kendala? <span class="text-red-500">*</span></label>
+          <select id="selectAkun" name="Jenis Akun dan keamanan apa yang mengalami kendala?" onchange="handleSubOther('selectAkun', 'extraAkunLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
+            <option value="" disabled selected>-- Pilih Kendala Akun / Keamanan --</option>
+            <option value="Lupa password">Lupa password</option>
+            <option value="Spam email">Spam email</option>
+            <option value="Login mencurigakan">Login mencurigakan</option>
+            <option value="Antivirus mendeteksi malware">Antivirus mendeteksi malware</option>
+            <option value="Yang lain:">Yang lain:</option>
+          </select>
+          
+          <div id="extraAkunLainnya" class="hidden mt-3">
+            <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian lainnya:</label>
+            <input type="text" id="inputAkunLainnya" placeholder="Tuliskan kendala akun / keamanan Anda..."
+              class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+          </div>
+        </div>
+
+        <!-- 7. BAGIAN 6: DETAIL KRONOLOGI & BUKTI -->
+        <!-- Lampiran Foto/Screenshot -->
+        <div id="attachmentSection" class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-gray-800 font-semibold text-sm">
+              Lampiran Foto/Screenshot (Upload File): Bukti layar error atau kerusakan fisik. <span class="text-red-500 font-bold">*</span>
+            </label>
+          </div>
+          <p class="text-xs text-gray-500 mb-4">Pilih foto dari galeri/file komputer ATAU ambil foto langsung menggunakan kamera</p>
+          
+          <input type="file" id="fileInput" accept="image/*,.pdf" onchange="handleFileSelect(event)" class="hidden">
+          <input type="file" id="cameraMobileInput" accept="image/*" capture="environment" onchange="handleFileSelect(event)" class="hidden">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <button type="button" onclick="document.getElementById('fileInput').click()"
+              class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl border-2 border-dashed border-indigo-300 bg-indigo-50/50 hover:bg-indigo-100/50 text-indigo-700 text-sm font-semibold transition">
+              <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <span>Pilih Dari File / Galeri</span>
+            </button>
+
+            <button type="button" onclick="openCameraModal()"
+              class="flex items-center justify-center space-x-2 py-3 px-4 rounded-xl border-2 border-indigo-600 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-sm transition">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span>Ambil Foto Langsung</span>
+            </button>
+          </div>
+
+          <div id="previewContainer" class="hidden p-3 bg-gray-50 border border-gray-200 rounded-xl mt-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <img id="previewImage" src="" alt="Preview" class="w-14 h-14 object-cover rounded-lg border border-gray-300">
+              <div>
+                <div id="previewFileName" class="text-xs font-bold text-gray-800 truncate max-w-[180px] sm:max-w-[280px]">Foto_Bukti.jpg</div>
+                <div class="text-[11px] text-green-600 font-semibold">✓ Foto siap dilampirkan</div>
+              </div>
+            </div>
+            <button type="button" onclick="clearAttachment()" class="text-xs text-red-600 hover:text-red-800 font-semibold px-2 py-1 bg-red-50 hover:bg-red-100 rounded-lg">
+              Hapus / Ganti
+            </button>
+          </div>
+        </div>
+
+        <!-- Deskripsi Kendala (Teks Jawaban Panjang) -->
+        <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
+          <label class="block text-gray-800 font-semibold text-sm mb-1">
+            Deskripsi Kendala <span class="text-red-500">*</span>
+          </label>
+          <p class="text-xs text-gray-400 mb-2">Teks jawaban panjang</p>
+          <textarea id="deskripsiKendala" name="Deskripsi Kendala" rows="4" required placeholder="Jelaskan secara rinci kronologi kendala atau spesifikasi permintaan Anda..." class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 resize-none"></textarea>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex items-center justify-between pt-2">
+          <button type="submit" id="btnSubmit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-md transition text-sm flex items-center space-x-2">
+            <span id="btnText">Kirim Tiket Permintaan</span>
+            <svg id="btnSpinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+          </button>
+          <button type="reset" onclick="handleReset()" class="text-gray-500 hover:text-gray-700 text-sm font-medium px-4 py-2">Kosongkan</button>
+        </div>
       </div>
 
     </form>
@@ -371,6 +394,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
+    const ASET_IT_FORM_URL = "https://docs.google.com/forms/d/135dYnKlb-5MJkL1Pg-SNQn3gTuc4S_lVAANXz9ewxtw/viewform";
 
     var employeeData = [];
     var currentAttachment = { fileData: null, fileName: "", fileType: "" };
@@ -424,6 +448,22 @@
     window.addEventListener("DOMContentLoaded", function() {
       loadAllEmployees();
     });
+
+    // Kontrol Pengalihan Pengelolaan Aset IT
+    function handleJenisPengajuanChange(val) {
+      var isAsetIT = (val === "Pengelolaan Aset IT");
+      document.getElementById("boxPengelolaanAset").classList.toggle("hidden", !isAsetIT);
+      document.getElementById("regularFormFields").classList.toggle("hidden", isAsetIT);
+
+      // Disable/enable required validation agar tidak menghambat jika aset IT dipilih
+      var deskripsi = document.getElementById("deskripsiKendala");
+      if (deskripsi) deskripsi.required = !isAsetIT;
+
+      if (isAsetIT) {
+        // Otomatis buka form Aset IT di tab baru
+        window.open(ASET_IT_FORM_URL, "_blank");
+      }
+    }
 
     // Kontrol Kategori Inti
     function handleCategoryChange() {
@@ -594,6 +634,7 @@
 
     function handleReset() {
       setTimeout(function() {
+        handleJenisPengajuanChange(document.getElementById("selectJenisPengajuan").value);
         handleCategoryChange();
         handleSubOther('selectHardware', 'extraHardwareLainnya');
         handleSubOther('selectSoftware', 'extraSoftwareLainnya');
