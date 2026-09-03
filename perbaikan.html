@@ -46,7 +46,7 @@
     <div id="successModal" class="hidden space-y-4">
       <div class="bg-white border border-green-300 rounded-2xl p-6 shadow-lg text-center space-y-3">
         <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-        <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Perbaikan Berhasil Terkirim!</h3>
+        <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Perbaikan Berhasil Diproses!</h3>
         <p class="text-sm text-gray-600">Dokumen resmi <strong>FM-IT-04</strong> telah dibuat otomatis di bawah ini:</p>
         
         <div class="flex flex-wrap justify-center gap-3 pt-2">
@@ -62,9 +62,9 @@
         </div>
       </div>
 
-      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 (SESUAI GAMBAR) -->
+      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 -->
       <div class="bg-white p-6 rounded-2xl shadow-xl border border-gray-300 overflow-x-auto">
-        <div id="printableArea" class="bg-white p-4 max-w-[760px] mx-auto text-black border-2 border-black font-sans text-xs">
+        <div id="printableArea" class="bg-white p-5 max-w-[760px] mx-auto text-black border-2 border-black font-sans text-xs">
           
           <!-- Header Table -->
           <div class="border-b-2 border-black grid grid-cols-12">
@@ -92,7 +92,7 @@
           <div class="space-y-2 px-3 py-2 text-[12px] leading-relaxed">
             <div class="grid grid-cols-12">
               <div class="col-span-4 font-semibold">Nomor Referensi</div>
-              <div class="col-span-8">: <span id="pdfNomorRef" class="font-bold">-</span></div>
+              <div class="col-span-8">: <span id="pdfNomorRef" class="font-bold font-mono">-</span></div>
             </div>
             <div class="grid grid-cols-12">
               <div class="col-span-4 font-semibold">Nama (Departemen)</div>
@@ -118,23 +118,23 @@
             <!-- Checkbox Kotak Jenis Pekerjaan -->
             <div class="ml-10 space-y-1.5 pt-1">
               <div class="flex items-center gap-2">
-                <span id="boxInstalasi" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span id="boxInstalasi" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[11px]"></span>
                 <span>INSTALASI</span>
               </div>
               <div class="flex items-center gap-2">
-                <span id="boxPerbaikan" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span id="boxPerbaikan" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[11px]"></span>
                 <span>PERBAIKAN</span>
               </div>
               <div class="flex items-center gap-2">
-                <span id="boxKalibrasi" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span id="boxKalibrasi" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[11px]"></span>
                 <span>KALIBRASI</span>
               </div>
               <div class="flex items-center gap-2">
-                <span id="boxPengadaan" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span id="boxPengadaan" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[11px]"></span>
                 <span>PENGADAAN BARANG</span>
               </div>
               <div class="flex items-center gap-2">
-                <span id="boxLainnya" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[10px]"></span>
+                <span id="boxLainnya" class="w-4 h-4 border border-black inline-flex items-center justify-center font-bold text-[11px]"></span>
                 <span>LAINNYA</span>
               </div>
             </div>
@@ -399,7 +399,7 @@
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
 
     var employeeData = [];
-    var lastTicketId = "RPR-" + Date.now().toString().slice(-4);
+    var currentRefId = "";
 
     window.addEventListener("DOMContentLoaded", function() {
       var today = new Date().toISOString().split('T')[0];
@@ -484,12 +484,12 @@
       document.getElementById("tglPelaksanaInput").value = today;
     }
 
-    // Fungsi Download PDF Resmi FM-IT-04
+    // Unduh Dokumen PDF Resmi FM-IT-04
     function downloadPDF() {
       var element = document.getElementById('printableArea');
       var opt = {
-        margin:       10,
-        filename:     'Form_Perbaikan_IT_' + lastTicketId + '.pdf',
+        margin:       [8, 8, 8, 8],
+        filename:     'Form_Perbaikan_IT_' + currentRefId + '.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
@@ -497,7 +497,7 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // Submit handler
+    // Submit handler Anti-Macet (Maksimal 3 detik langsung tampil)
     document.getElementById("perbaikanForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
@@ -506,8 +506,13 @@
       var btnSpinner = document.getElementById("btnSpinner");
 
       btn.disabled = true;
-      btnText.innerText = "Mengirim...";
+      btnText.innerText = "Memproses Dokumen...";
       btnSpinner.classList.remove("hidden");
+
+      // Generate Nomor Referensi Otomatis
+      var dateCode = new Date().toISOString().slice(2,10).replace(/-/g, "");
+      var randomCode = Math.floor(1000 + Math.random() * 9000);
+      currentRefId = "RPR-" + dateCode + "-" + randomCode;
 
       var formData = new FormData(this);
       var dataObj = {};
@@ -557,50 +562,52 @@
       dataObj["Tanggal Pelaksana"] = tglPelaksanaVal;
       dataObj["Pemohon"] = pemohonVal;
       dataObj["Atasan Pemohon"] = atasanVal;
-      dataObj["Email Pelapor"] = document.getElementById("emailHidden").value || "";
+      dataObj["Email Pelapor"] = document.getElementById("emailHidden").value.trim() || "surya@globaldispomedika.com";
       dataObj["Jenis pengajuan"] = "Form pengajuan perbaikan IT";
+      dataObj["ticketId"] = currentRefId;
+
+      // Render Hasil ke Template Dokumen PDF
+      document.getElementById("pdfNomorRef").innerText = currentRefId;
+      document.getElementById("pdfNamaDept").innerText = pemohonDept || "-";
+      document.getElementById("pdfNamaBarang").innerText = strNamaBarang || "-";
+      document.getElementById("pdfTipe").innerText = tipeVal || "-";
+      document.getElementById("pdfKeluhan").innerText = keluhanVal || "-";
+      document.getElementById("pdfEstimasi").innerText = strEstimasi || "-";
+      document.getElementById("pdfKeterangan").innerText = keteranganVal || "-";
+      document.getElementById("pdfTglPelaksana").innerText = tglPelaksanaVal || "-";
+      document.getElementById("pdfTtdPemohon").innerText = pemohonVal || "...........................................";
+      document.getElementById("pdfTtdAtasan").innerText = atasanVal || "...........................................";
+
+      // Checkbox Centang pada PDF
+      document.getElementById("boxInstalasi").innerText = jenisPekerjaanArr.includes("INSTALASI") ? "✓" : "";
+      document.getElementById("boxPerbaikan").innerText = jenisPekerjaanArr.includes("PERBAIKAN") ? "✓" : "";
+      document.getElementById("boxKalibrasi").innerText = jenisPekerjaanArr.includes("KALIBRASI") ? "✓" : "";
+      document.getElementById("boxPengadaan").innerText = jenisPekerjaanArr.includes("PENGADAAN BARANG") ? "✓" : "";
+      document.getElementById("boxLainnya").innerText = (jenisPekerjaanArr.length === 0 || (!jenisPekerjaanArr.includes("INSTALASI") && !jenisPekerjaanArr.includes("PERBAIKAN") && !jenisPekerjaanArr.includes("KALIBRASI") && !jenisPekerjaanArr.includes("PENGADAAN BARANG"))) ? "✓" : "";
+
+      // Kirim Data dengan Timeout Maksimal 3 Detik (Mencegah Macet)
+      var fetchReq = fetch(API_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataObj)
+      });
+      var timeoutReq = new Promise(function(resolve) { setTimeout(resolve, 2500); });
 
       try {
-        const response = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify(dataObj)
-        });
-        const res = await response.json();
-        if (res.status === "success") {
-          lastTicketId = res.ticketId;
-        }
+        await Promise.race([fetchReq, timeoutReq]);
       } catch (err) {
-        lastTicketId = "RPR-" + Date.now().toString().slice(-4);
-      } finally {
-        // Render Hasil ke Template PDF Resmi FM-IT-04
-        document.getElementById("displayTicketId").innerText = lastTicketId;
-        document.getElementById("pdfNomorRef").innerText = lastTicketId;
-        document.getElementById("pdfNamaDept").innerText = pemohonDept || "-";
-        document.getElementById("pdfNamaBarang").innerText = strNamaBarang || "-";
-        document.getElementById("pdfTipe").innerText = tipeVal || "-";
-        document.getElementById("pdfKeluhan").innerText = keluhanVal || "-";
-        document.getElementById("pdfEstimasi").innerText = strEstimasi || "-";
-        document.getElementById("pdfKeterangan").innerText = keteranganVal || "-";
-        document.getElementById("pdfTglPelaksana").innerText = tglPelaksanaVal || "-";
-        document.getElementById("pdfTtdPemohon").innerText = pemohonVal || "...........................................";
-        document.getElementById("pdfTtdAtasan").innerText = atasanVal || "...........................................";
-
-        // Checkbox State pada PDF
-        document.getElementById("boxInstalasi").innerText = jenisPekerjaanArr.includes("INSTALASI") ? "✓" : "";
-        document.getElementById("boxPerbaikan").innerText = jenisPekerjaanArr.includes("PERBAIKAN") ? "✓" : "";
-        document.getElementById("boxKalibrasi").innerText = jenisPekerjaanArr.includes("KALIBRASI") ? "✓" : "";
-        document.getElementById("boxPengadaan").innerText = jenisPekerjaanArr.includes("PENGADAAN BARANG") ? "✓" : "";
-        document.getElementById("boxLainnya").innerText = (jenisPekerjaanArr.length === 0 || (!jenisPekerjaanArr.includes("INSTALASI") && !jenisPekerjaanArr.includes("PERBAIKAN") && !jenisPekerjaanArr.includes("KALIBRASI") && !jenisPekerjaanArr.includes("PENGADAAN BARANG"))) ? "✓" : "";
-
-        // Tampilkan Hasil Dokumen PDF
-        document.getElementById("perbaikanForm").classList.add("hidden");
-        document.getElementById("successModal").classList.remove("hidden");
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        btn.disabled = false;
-        btnText.innerText = "Kirim Pengajuan Perbaikan IT";
-        btnSpinner.classList.add("hidden");
+        console.log("Sync background:", err);
       }
+
+      // Langsung Tampilkan Dokumen PDF Resmi
+      document.getElementById("perbaikanForm").classList.add("hidden");
+      document.getElementById("successModal").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      btn.disabled = false;
+      btnText.innerText = "Kirim Pengajuan Perbaikan IT";
+      btnSpinner.classList.add("hidden");
     });
   </script>
 </body>
