@@ -165,12 +165,18 @@
           <option value="Akun dan Keamanan">Akun dan Keamanan</option>
           <option value="Lainnya">Lainnya</option>
         </select>
+
+        <div id="extraKategoriLainnya" class="hidden mt-3">
+          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan rincian kategori kendala Anda:</label>
+          <input type="text" id="inputKategoriLainnya" placeholder="Contoh: CCTV, Fingerprint, Telepon PABX, dll."
+            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+        </div>
       </div>
 
-      <!-- Sub Kategori -->
+      <!-- Sub Kategori: Hardware -->
       <div id="secHardware" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis hardware apa yang mengalami kendala?</label>
-        <select name="Jenis hardware apa yang mengalami kendala?" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600">
+        <select id="selectHardware" name="Jenis hardware apa yang mengalami kendala?" onchange="handleSubOther('selectHardware', 'extraHardwareLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
           <option value="">-- Pilih Jenis Hardware --</option>
           <option value="PC / Komputer">PC / Komputer</option>
           <option value="Laptop">Laptop</option>
@@ -181,11 +187,19 @@
           <option value="UPS / Power Supply">UPS / Power Supply</option>
           <option value="Lainnya">Lainnya</option>
         </select>
+        
+        <!-- Input Tepat di Kolom Hardware -->
+        <div id="extraHardwareLainnya" class="hidden mt-3">
+          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan jenis hardware yang dimaksud:</label>
+          <input type="text" id="inputHardwareLainnya" placeholder="Contoh: Switch Hub, Kabel HDMI, Proyektor, Mesin Fax, dll."
+            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+        </div>
       </div>
 
+      <!-- Sub Kategori: Software -->
       <div id="secSoftware" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis software apa yang mengalami kendala?</label>
-        <select name="Jenis software apa yang mengalami kendala?" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600">
+        <select id="selectSoftware" name="Jenis software apa yang mengalami kendala?" onchange="handleSubOther('selectSoftware', 'extraSoftwareLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
           <option value="">-- Pilih Jenis Software --</option>
           <option value="Windows / OS">Windows / OS</option>
           <option value="Microsoft Office">Microsoft Office</option>
@@ -193,11 +207,19 @@
           <option value="Antivirus">Antivirus</option>
           <option value="Lainnya">Lainnya</option>
         </select>
+        
+        <!-- Input Tepat di Kolom Software -->
+        <div id="extraSoftwareLainnya" class="hidden mt-3">
+          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan nama software / aplikasi yang dimaksud:</label>
+          <input type="text" id="inputSoftwareLainnya" placeholder="Contoh: CorelDraw, Adobe PDF, Browser Chrome, dll."
+            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+        </div>
       </div>
 
+      <!-- Sub Kategori: Jaringan -->
       <div id="secJaringan" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis jaringan apa yang mengalami kendala?</label>
-        <select name="Jenis jaringan apa yang mengalami kendala?" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600">
+        <select id="selectJaringan" name="Jenis jaringan apa yang mengalami kendala?" onchange="handleSubOther('selectJaringan', 'extraJaringanLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
           <option value="">-- Pilih Masalah Jaringan --</option>
           <option value="Wi-Fi Kantor">Wi-Fi Kantor</option>
           <option value="Kabel LAN">Kabel LAN</option>
@@ -205,11 +227,19 @@
           <option value="VPN">VPN</option>
           <option value="Lainnya">Lainnya</option>
         </select>
+        
+        <!-- Input Tepat di Kolom Jaringan -->
+        <div id="extraJaringanLainnya" class="hidden mt-3">
+          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan kendala jaringan yang dimaksud:</label>
+          <input type="text" id="inputJaringanLainnya" placeholder="Contoh: Akses server lokal lambat, IP bentrok, dll."
+            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+        </div>
       </div>
 
+      <!-- Sub Kategori: Akun -->
       <div id="secAkun" class="hidden bg-white rounded-2xl shadow-sm p-6 border-l-4 border-indigo-500">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis Akun dan keamanan apa yang mengalami kendala?</label>
-        <select name="Jenis Akun dan keamanan apa yang mengalami kendala?" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600">
+        <select id="selectAkun" name="Jenis Akun dan keamanan apa yang mengalami kendala?" onchange="handleSubOther('selectAkun', 'extraAkunLainnya')" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
           <option value="">-- Pilih Masalah Akun --</option>
           <option value="Reset Password">Reset Password</option>
           <option value="Akun Terkunci">Akun Terkunci</option>
@@ -217,6 +247,13 @@
           <option value="Hak Akses Folder">Hak Akses Folder</option>
           <option value="Lainnya">Lainnya</option>
         </select>
+        
+        <!-- Input Tepat di Kolom Akun -->
+        <div id="extraAkunLainnya" class="hidden mt-3">
+          <label class="block text-xs font-semibold text-indigo-700 mb-1">Tuliskan kebutuhan akun yang dimaksud:</label>
+          <input type="text" id="inputAkunLainnya" placeholder="Contoh: Akun Zoom, Akses Folder Share HRD, dll."
+            class="w-full border border-indigo-300 rounded-xl p-3 text-sm text-gray-800 outline-none focus:border-indigo-600 bg-indigo-50/20">
+        </div>
       </div>
 
       <!-- Jenis Isu -->
@@ -322,9 +359,8 @@
     var currentAttachment = { fileData: null, fileName: "", fileType: "" };
     var activeCameraStream = null;
 
-    // DUAL ENGINE LOADER: Membaca Langsung dari Google Spreadsheet
+    // DUAL ENGINE AUTO-READER (GViz Real-time + Apps Script)
     async function loadAllEmployees() {
-      // 1. ENGINE 1: Google Sheet GViz API (Langsung Realtime dari Sheet DATA USER)
       try {
         var gvizUrl = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json&sheet=DATA%20USER";
         var res = await fetch(gvizUrl);
@@ -350,7 +386,7 @@
 
           if (list.length > 0) {
             employeeData = list;
-            console.log("✓ Berhasil memuat " + employeeData.length + " karyawan via Google Live Sheet!");
+            console.log("✓ Berhasil memuat " + employeeData.length + " karyawan via Google Sheet Live!");
             return;
           }
         }
@@ -358,21 +394,35 @@
         console.log("GViz info:", err);
       }
 
-      // 2. ENGINE 2: Fallback Apps Script API
+      // Fallback
       try {
         var res2 = await fetch(API_URL);
         var list2 = await res2.json();
         if (Array.isArray(list2) && list2.length > 0) {
           employeeData = list2;
-          console.log("✓ Berhasil memuat via Apps Script Backend:", employeeData.length);
         }
       } catch (e) {}
     }
 
-    // Eksekusi pemuatan data seketika
     window.addEventListener("DOMContentLoaded", function() {
       loadAllEmployees();
     });
+
+    // Kontrol Input Dinamis "Lainnya"
+    function handleCategoryChange() {
+      var val = document.getElementById("kategoriSelect").value;
+      document.getElementById("secHardware").classList.toggle("hidden", val !== "Hardware");
+      document.getElementById("secSoftware").classList.toggle("hidden", val !== "Software");
+      document.getElementById("secJaringan").classList.toggle("hidden", val !== "Jaringan");
+      document.getElementById("secAkun").classList.toggle("hidden", val !== "Akun dan Keamanan");
+
+      document.getElementById("extraKategoriLainnya").classList.toggle("hidden", val !== "Lainnya");
+    }
+
+    function handleSubOther(selectId, extraContainerId) {
+      var selVal = document.getElementById(selectId).value;
+      document.getElementById(extraContainerId).classList.toggle("hidden", selVal !== "Lainnya");
+    }
 
     function handleFileSelect(event) {
       var file = event.target.files[0];
@@ -527,17 +577,13 @@
       }
     });
 
-    function handleCategoryChange() {
-      var val = document.getElementById("kategoriSelect").value;
-      document.getElementById("secHardware").classList.toggle("hidden", val !== "Hardware");
-      document.getElementById("secSoftware").classList.toggle("hidden", val !== "Software");
-      document.getElementById("secJaringan").classList.toggle("hidden", val !== "Jaringan");
-      document.getElementById("secAkun").classList.toggle("hidden", val !== "Akun dan Keamanan");
-    }
-
     function handleReset() {
       setTimeout(function() {
         handleCategoryChange();
+        handleSubOther('selectHardware', 'extraHardwareLainnya');
+        handleSubOther('selectSoftware', 'extraSoftwareLainnya');
+        handleSubOther('selectJaringan', 'extraJaringanLainnya');
+        handleSubOther('selectAkun', 'extraAkunLainnya');
         clearAttachment();
         document.getElementById("selectedEmployeeBadge").classList.add("hidden");
         document.getElementById("autocompleteList").classList.add("hidden");
@@ -551,6 +597,7 @@
       handleReset();
     }
 
+    // Submit Handler: Mengirim Nilai yang Diketik Langsung ke Kolom yang Sesuai
     document.getElementById("ticketForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
@@ -571,6 +618,23 @@
       var formData = new FormData(this);
       var dataObj = {};
       formData.forEach(function(val, key) { dataObj[key] = val; });
+
+      // JIKA MEMILIH LAINNYA, MASUKKAN LANGSUNG TEKS YANG DIKETIK KE KOLOM TERSEBUT:
+      if (dataObj["Kategori kendala"] === "Lainnya" && document.getElementById("inputKategoriLainnya").value.trim()) {
+        dataObj["Kategori kendala"] = document.getElementById("inputKategoriLainnya").value.trim();
+      }
+      if (dataObj["Jenis hardware apa yang mengalami kendala?"] === "Lainnya" && document.getElementById("inputHardwareLainnya").value.trim()) {
+        dataObj["Jenis hardware apa yang mengalami kendala?"] = document.getElementById("inputHardwareLainnya").value.trim();
+      }
+      if (dataObj["Jenis software apa yang mengalami kendala?"] === "Lainnya" && document.getElementById("inputSoftwareLainnya").value.trim()) {
+        dataObj["Jenis software apa yang mengalami kendala?"] = document.getElementById("inputSoftwareLainnya").value.trim();
+      }
+      if (dataObj["Jenis jaringan apa yang mengalami kendala?"] === "Lainnya" && document.getElementById("inputJaringanLainnya").value.trim()) {
+        dataObj["Jenis jaringan apa yang mengalami kendala?"] = document.getElementById("inputJaringanLainnya").value.trim();
+      }
+      if (dataObj["Jenis Akun dan keamanan apa yang mengalami kendala?"] === "Lainnya" && document.getElementById("inputAkunLainnya").value.trim()) {
+        dataObj["Jenis Akun dan keamanan apa yang mengalami kendala?"] = document.getElementById("inputAkunLainnya").value.trim();
+      }
 
       dataObj.fileName = currentAttachment.fileName;
       dataObj.fileType = currentAttachment.fileType;
