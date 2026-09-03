@@ -63,27 +63,39 @@
       </div>
     </div>
 
-    <!-- Alert Sukses & Hasil PDF Modal -->
+    <!-- Alert Sukses & Hasil PDF Modal (CONTOH KEDUA) -->
     <div id="successModal" class="hidden space-y-4">
-      <div class="bg-white border border-green-300 rounded-2xl p-6 shadow-lg text-center space-y-3">
-        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-xl font-bold">✓</div>
-        <h3 class="text-lg font-bold text-gray-800">Form Pengajuan Perbaikan Berhasil Diproses!</h3>
-        <p class="text-sm text-gray-600">Dokumen resmi standar <strong>FM-IT-04</strong> telah dibuat otomatis:</p>
+      <div class="bg-white border border-green-200 rounded-3xl p-8 shadow-xl text-center space-y-4">
+        <!-- Checklist Hijau Lembut -->
+        <div class="w-14 h-14 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
+          ✓
+        </div>
         
-        <div class="flex flex-wrap justify-center gap-3 pt-2">
-          <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+        <!-- Judul Sukses Persis Contoh Gambar Kedua -->
+        <h3 class="text-xl sm:text-2xl font-bold text-slate-800">
+          Form Pengajuan Perbaikan Berhasil Diproses!
+        </h3>
+        
+        <!-- Keterangan Subteks -->
+        <p class="text-sm sm:text-base text-slate-600">
+          Dokumen resmi <strong>FM-IT-04</strong> telah dibuat otomatis di bawah ini:
+        </p>
+        
+        <!-- Tombol Aksi -->
+        <div class="flex flex-wrap justify-center items-center gap-3 pt-2">
+          <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-md transition flex items-center gap-2">
             <span>📥 Unduh Dokumen PDF</span>
           </button>
-          <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-5 py-2.5 rounded-xl text-xs shadow flex items-center gap-2">
+          <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-900 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-md transition flex items-center gap-2">
             <span>🖨️ Cetak / Print</span>
           </button>
-          <button onclick="resetFormView()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-4 py-2.5 rounded-xl text-xs">
+          <button onclick="resetFormView()" class="bg-gray-100 hover:bg-gray-200 text-slate-700 font-semibold px-5 py-3 rounded-xl text-sm transition">
             + Buat Pengajuan Baru
           </button>
         </div>
       </div>
 
-      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 (100% REPLIKA CONTOH GAMBAR) -->
+      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 (100% PERSIS CONTOH GAMBAR) -->
       <div class="bg-white p-3 sm:p-6 rounded-2xl shadow-xl border border-gray-300 overflow-x-auto">
         <div id="printableArea" class="fm-document">
           
@@ -257,8 +269,6 @@
           
           <div id="autocompleteList" class="hidden absolute left-0 right-0 top-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto divide-y divide-gray-100"></div>
         </div>
-
-        <input type="hidden" id="emailHidden" name="Email Pelapor" value="">
       </div>
 
       <!-- 2. Nama Barang (Checkboxes) -->
@@ -441,14 +451,10 @@
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
       </div>
 
-      <!-- Submit & Navigasi -->
-      <div class="flex items-center justify-between pt-2">
-        <button type="submit" id="btnSubmit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-md transition text-sm flex items-center space-x-2">
-          <span id="btnText">Kirim Pengajuan Perbaikan IT</span>
-          <svg id="btnSpinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-          </svg>
+      <!-- Tombol Selesai (Hanya Proses Dokumen, Bebas Email Tiket) -->
+      <div class="flex items-center justify-between pt-4">
+        <button type="submit" id="btnSubmit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-10 py-3 rounded-xl shadow-md hover:shadow-lg transition text-sm flex items-center space-x-2">
+          <span>Selesai</span>
         </button>
         <a href="/" class="text-gray-500 hover:text-gray-700 text-sm font-medium px-4 py-2">Kembali ke Helpdesk</a>
       </div>
@@ -457,9 +463,7 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
-
     var employeeData = [];
     var currentRefId = "";
 
@@ -518,17 +522,16 @@
         item.className = "p-3 hover:bg-indigo-50 cursor-pointer transition flex items-center justify-between border-b border-gray-100 last:border-0";
         item.innerHTML = `<div><div class="text-sm font-semibold text-gray-800">${emp.nama}</div><div class="text-xs text-gray-500">${emp.dept || "-"}</div></div><span class="text-xs bg-gray-100 font-mono text-gray-600 px-2 py-0.5 rounded">${emp.nik || "ID"}</span>`;
         item.addEventListener("click", function() {
-          selectEmployee(emp.nama, emp.dept, emp.email);
+          selectEmployee(emp.nama, emp.dept);
         });
         listContainer.appendChild(item);
       });
       listContainer.classList.remove("hidden");
     }
 
-    function selectEmployee(nama, dept, email) {
+    function selectEmployee(nama, dept) {
       document.getElementById("pemohonDeptInput").value = nama + " (" + (dept || "General") + ")";
       document.getElementById("pemohonInput").value = nama;
-      document.getElementById("emailHidden").value = email || "";
       document.getElementById("autocompleteList").classList.add("hidden");
     }
 
@@ -544,6 +547,7 @@
       document.getElementById("successModal").classList.add("hidden");
       var today = new Date().toISOString().split('T')[0];
       document.getElementById("tglPelaksanaInput").value = today;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // Unduh Dokumen PDF Resmi FM-IT-04
@@ -559,27 +563,16 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // Submit handler Anti-Macet (Maksimal 2 detik langsung tampil)
-    document.getElementById("perbaikanForm").addEventListener("submit", async function(e) {
+    // Tombol Selesai: Langsung Munculkan Tampilan Contoh Kedua & PDF
+    document.getElementById("perbaikanForm").addEventListener("submit", function(e) {
       e.preventDefault();
-
-      var btn = document.getElementById("btnSubmit");
-      var btnText = document.getElementById("btnText");
-      var btnSpinner = document.getElementById("btnSpinner");
-
-      btn.disabled = true;
-      btnText.innerText = "Memproses Dokumen...";
-      btnSpinner.classList.remove("hidden");
 
       // Generate Nomor Referensi Otomatis
       var dateCode = new Date().toISOString().slice(2,10).replace(/-/g, "");
       var randomCode = Math.floor(1000 + Math.random() * 9000);
       currentRefId = "RPR-" + dateCode + "-" + randomCode;
 
-      var formData = new FormData(this);
-      var dataObj = {};
-
-      // Nama Barang
+      // Ambil Nilai Nama Barang
       var namaBarangArr = [];
       document.querySelectorAll("input[name='Nama Barang']:checked").forEach(function(el) {
         namaBarangArr.push(el.value);
@@ -588,17 +581,14 @@
         namaBarangArr.push(document.getElementById("inputBarangLain").value.trim());
       }
       var strNamaBarang = namaBarangArr.join(", ");
-      dataObj["Nama Barang"] = strNamaBarang;
 
-      // Jenis Pekerjaan
+      // Ambil Nilai Jenis Pekerjaan
       var jenisPekerjaanArr = [];
       document.querySelectorAll("input[name='Jenis Pekerjaan']:checked").forEach(function(el) {
         jenisPekerjaanArr.push(el.value);
       });
-      var strJenisPekerjaan = jenisPekerjaanArr.join(", ");
-      dataObj["Jenis Pekerjaan"] = strJenisPekerjaan;
 
-      // Estimasi Waktu
+      // Ambil Nilai Estimasi Waktu
       var estimasiArr = [];
       document.querySelectorAll("input[name='Estimasi waktu perbaikan']:checked").forEach(function(el) {
         estimasiArr.push(el.value);
@@ -607,7 +597,6 @@
         estimasiArr.push(document.getElementById("inputWaktuLain").value.trim());
       }
       var strEstimasi = estimasiArr.join(", ");
-      dataObj["Estimasi waktu perbaikan"] = strEstimasi;
 
       var pemohonDept = document.getElementById("pemohonDeptInput").value;
       var tipeVal = document.getElementById("tipeInput").value;
@@ -617,18 +606,7 @@
       var pemohonVal = document.getElementById("pemohonInput").value;
       var atasanVal = document.getElementById("atasanInput").value;
 
-      dataObj["Nama Lengkap Pemohon (Departemen Pemohon)"] = pemohonDept;
-      dataObj["Tipe"] = tipeVal;
-      dataObj["Keluhan"] = keluhanVal;
-      dataObj["Keterangan"] = keteranganVal;
-      dataObj["Tanggal Pelaksana"] = tglPelaksanaVal;
-      dataObj["Pemohon"] = pemohonVal;
-      dataObj["Atasan Pemohon"] = atasanVal;
-      dataObj["Email Pelapor"] = document.getElementById("emailHidden").value.trim() || "surya@globaldispomedika.com";
-      dataObj["Jenis pengajuan"] = "Form pengajuan perbaikan IT";
-      dataObj["ticketId"] = currentRefId;
-
-      // Render Hasil ke Template Dokumen Fisik (100% Persis Contoh Gambar)
+      // Render Data Lengkap ke Template Dokumen Fisik FM-IT-04
       document.getElementById("pdfNomorRef").innerText = currentRefId;
       document.getElementById("pdfNamaDept").innerText = pemohonDept || "-";
       document.getElementById("pdfNamaBarang").innerText = strNamaBarang || "-";
@@ -647,29 +625,10 @@
       document.getElementById("boxPengadaan").innerText = jenisPekerjaanArr.includes("PENGADAAN BARANG") ? "✓" : "";
       document.getElementById("boxLainnya").innerText = (jenisPekerjaanArr.length === 0 || (!jenisPekerjaanArr.includes("INSTALASI") && !jenisPekerjaanArr.includes("PERBAIKAN") && !jenisPekerjaanArr.includes("KALIBRASI") && !jenisPekerjaanArr.includes("PENGADAAN BARANG"))) ? "✓" : "";
 
-      // Kirim Data dengan Timeout Maksimal 2 Detik (Bebas Macet)
-      var fetchReq = fetch(API_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataObj)
-      });
-      var timeoutReq = new Promise(function(resolve) { setTimeout(resolve, 1800); });
-
-      try {
-        await Promise.race([fetchReq, timeoutReq]);
-      } catch (err) {
-        console.log("Background sync notice:", err);
-      }
-
-      // Langsung Tampilkan Dokumen Resmi
+      // Langsung Tampilkan Halaman Sukses (Contoh Kedua) & Dokumen PDF
       document.getElementById("perbaikanForm").classList.add("hidden");
       document.getElementById("successModal").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      btn.disabled = false;
-      btnText.innerText = "Kirim Pengajuan Perbaikan IT";
-      btnSpinner.classList.add("hidden");
     });
   </script>
 </body>
