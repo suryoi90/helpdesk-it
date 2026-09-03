@@ -120,7 +120,7 @@
         </select>
       </div>
 
-      <!-- 4. Jenis Pengajuan (Dengan Redirect Aset IT) -->
+      <!-- 4. Jenis Pengajuan (Dengan Redirect ke perbaikan.html) -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis pengajuan <span class="text-red-500">*</span></label>
         <select id="selectJenisPengajuan" name="Jenis pengajuan" required onchange="handleJenisPengajuanChange(this.value)" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
@@ -130,23 +130,23 @@
           <option value="Permintaan Akses">Permintaan Akses</option>
           <option value="Permintaan Perubahan">Permintaan Perubahan</option>
           <option value="Keamanan Informasi">Keamanan Informasi</option>
-          <option value="Pengelolaan Aset IT">Pengelolaan Aset IT</option>
+          <option value="Pengelolaan Aset IT">Pengelolaan Aset IT (Form Pengajuan Perbaikan IT)</option>
         </select>
 
-        <!-- Kotak Banner Pengalihan Khusus Pengelolaan Aset IT -->
+        <!-- Kotak Banner Pengalihan Khusus Form Pengajuan Perbaikan IT -->
         <div id="boxPengelolaanAset" class="hidden mt-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl space-y-3">
           <div class="flex items-start gap-3">
-            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-base shadow">📋</div>
+            <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-base shadow">🔧</div>
             <div>
-              <h4 class="text-sm font-bold text-indigo-900">Formulir Khusus Pengelolaan Aset IT</h4>
+              <h4 class="text-sm font-bold text-indigo-900">Form Pengajuan Perbaikan IT</h4>
               <p class="text-xs text-indigo-700 mt-0.5 leading-relaxed">
-                Pengajuan Pengelolaan Aset IT diproses melalui formulir terpisah. Tab formulir telah dibuka otomatis. Anda juga dapat mengklik tombol di bawah jika tab belum terbuka.
+                Pengajuan Perbaikan IT diproses melalui formulir perbaikan khusus. Tab baru telah dibuka otomatis. Anda juga dapat mengklik tombol di bawah jika tab belum terbuka.
               </p>
             </div>
           </div>
-          <a href="https://docs.google.com/forms/d/135dYnKlb-5MJkL1Pg-SNQn3gTuc4S_lVAANXz9ewxtw/viewform" target="_blank"
+          <a href="/perbaikan.html" target="_blank"
              class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow transition">
-            <span>Buka Formulir Pengelolaan Aset IT</span>
+            <span>Buka Form Pengajuan Perbaikan IT</span>
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
             </svg>
@@ -154,7 +154,7 @@
         </div>
       </div>
 
-      <!-- KONTEN FORMULIR REGULER (Otomatis tersembunyi jika pilih Pengelolaan Aset IT) -->
+      <!-- KONTEN FORMULIR REGULER -->
       <div id="regularFormFields" class="space-y-4">
         <!-- 5. Tingkat Urgensi -->
         <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
@@ -394,7 +394,7 @@
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
-    const ASET_IT_FORM_URL = "https://docs.google.com/forms/d/135dYnKlb-5MJkL1Pg-SNQn3gTuc4S_lVAANXz9ewxtw/viewform";
+    const FORM_PERBAIKAN_URL = "/perbaikan.html";
 
     var employeeData = [];
     var currentAttachment = { fileData: null, fileName: "", fileType: "" };
@@ -449,19 +449,18 @@
       loadAllEmployees();
     });
 
-    // Kontrol Pengalihan Pengelolaan Aset IT
+    // Kontrol Pengalihan Pengelolaan Aset IT (Form Pengajuan Perbaikan IT)
     function handleJenisPengajuanChange(val) {
-      var isAsetIT = (val === "Pengelolaan Aset IT");
+      var isAsetIT = (val.indexOf("Pengelolaan Aset IT") !== -1);
       document.getElementById("boxPengelolaanAset").classList.toggle("hidden", !isAsetIT);
       document.getElementById("regularFormFields").classList.toggle("hidden", isAsetIT);
 
-      // Disable/enable required validation agar tidak menghambat jika aset IT dipilih
       var deskripsi = document.getElementById("deskripsiKendala");
       if (deskripsi) deskripsi.required = !isAsetIT;
 
       if (isAsetIT) {
-        // Otomatis buka form Aset IT di tab baru
-        window.open(ASET_IT_FORM_URL, "_blank");
+        // Otomatis buka form perbaikan di tab baru
+        window.open(FORM_PERBAIKAN_URL, "_blank");
       }
     }
 
