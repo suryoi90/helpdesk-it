@@ -11,17 +11,22 @@
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
     
-    /* Layout Dokumen Fisik Persis 100% Sesuai Template */
-    .fm-document {
+    /* UKURAN FIX A4 PROPORSIONAL (TIDAK AKAN TERPOTONG) */
+    .fm-document-a4 {
       font-family: Arial, Helvetica, sans-serif !important;
       color: #000000 !important;
       background: #ffffff !important;
       border: 2px solid #000000 !important;
-      width: 100% !important;
-      max-width: 780px !important;
+      width: 190mm !important;
+      max-width: 100% !important;
       margin: 0 auto !important;
       box-sizing: border-box !important;
-      line-height: 1.35 !important;
+      line-height: 1.3 !important;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
     }
 
     @media print {
@@ -31,7 +36,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        width: 100% !important;
+        width: 190mm !important;
         margin: 0 !important;
         padding: 0 !important;
       }
@@ -63,25 +68,21 @@
       </div>
     </div>
 
-    <!-- Alert Sukses & Hasil PDF Modal (CONTOH KEDUA) -->
+    <!-- Alert Sukses & Hasil PDF Modal -->
     <div id="successModal" class="hidden space-y-4">
       <div class="bg-white border border-green-200 rounded-3xl p-8 shadow-xl text-center space-y-4">
-        <!-- Checklist Hijau Lembut -->
         <div class="w-14 h-14 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
           ✓
         </div>
         
-        <!-- Judul Sukses Persis Contoh Gambar Kedua -->
         <h3 class="text-xl sm:text-2xl font-bold text-slate-800">
           Form Pengajuan Perbaikan Berhasil Diproses!
         </h3>
         
-        <!-- Keterangan Subteks -->
         <p class="text-sm sm:text-base text-slate-600">
           Dokumen resmi <strong>FM-IT-04</strong> telah dibuat otomatis di bawah ini:
         </p>
         
-        <!-- Tombol Aksi -->
         <div class="flex flex-wrap justify-center items-center gap-3 pt-2">
           <button onclick="downloadPDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-xl text-sm shadow-md transition flex items-center gap-2">
             <span>📥 Unduh Dokumen PDF</span>
@@ -95,28 +96,28 @@
         </div>
       </div>
 
-      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 (100% PERSIS CONTOH GAMBAR) -->
-      <div class="bg-white p-3 sm:p-6 rounded-2xl shadow-xl border border-gray-300 overflow-x-auto">
-        <div id="printableArea" class="fm-document">
+      <!-- PRATINJAU DOKUMEN RESMI FM-IT-04 (PAS 1 LEMBAR A4) -->
+      <div class="bg-white p-3 sm:p-6 rounded-2xl shadow-xl border border-gray-300 overflow-x-auto flex justify-center">
+        <div id="printableArea" class="fm-document-a4">
           
           <!-- 1. HEADER KOTAK 3 BAGIAN -->
           <table style="width: 100%; border-collapse: collapse; border-bottom: 2px solid #000000;">
             <tr>
               <!-- Kolom Logo -->
-              <td style="width: 25%; border-right: 2px solid #000000; padding: 10px 12px; text-align: center; vertical-align: middle;">
-                <img src="https://lh3.googleusercontent.com/d/1fl09tFwRU-NavWdZ8jKG47IU7M6MqSJr" alt="Global Dispomedika" style="max-height: 46px; max-width: 155px; margin: 0 auto; object-fit: contain;">
+              <td style="width: 25%; border-right: 2px solid #000000; padding: 8px 10px; text-align: center; vertical-align: middle;">
+                <img src="https://lh3.googleusercontent.com/d/1fl09tFwRU-NavWdZ8jKG47IU7M6MqSJr" alt="Global Dispomedika" style="max-height: 42px; max-width: 150px; margin: 0 auto; object-fit: contain;">
               </td>
               <!-- Kolom Judul Form -->
-              <td style="width: 48%; border-right: 2px solid #000000; padding: 10px; text-align: center; vertical-align: middle;">
+              <td style="width: 48%; border-right: 2px solid #000000; padding: 8px; text-align: center; vertical-align: middle;">
                 <div style="font-size: 15px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">
                   FORM PENGAJUAN PERBAIKAN IT
                 </div>
               </td>
               <!-- Kolom Info Dokumen -->
-              <td style="width: 27%; padding: 6px 12px; vertical-align: middle; font-size: 11px;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 11px; line-height: 1.45;">
+              <td style="width: 27%; padding: 5px 10px; vertical-align: middle; font-size: 11px;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px; line-height: 1.4;">
                   <tr>
-                    <td style="width: 60px; padding: 1px 0;">No. Form</td>
+                    <td style="width: 58px; padding: 1px 0;">No. Form</td>
                     <td style="padding: 1px 0;">: FM-IT-04</td>
                   </tr>
                   <tr>
@@ -136,10 +137,10 @@
           <div style="border-top: 1px solid #000000; border-bottom: 2px solid #000000; height: 3px; background: #ffffff;"></div>
 
           <!-- 2. SECTION 1: RINCIAN PENGAJUAN -->
-          <div style="padding: 10px 14px 6px 14px; font-size: 11.5px;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; line-height: 1.6;">
+          <div style="padding: 8px 14px 6px 14px; font-size: 11.5px;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; line-height: 1.55;">
               <tr>
-                <td style="width: 170px; vertical-align: top;">Nomor Referensi</td>
+                <td style="width: 165px; vertical-align: top;">Nomor Referensi</td>
                 <td style="width: 15px; vertical-align: top; text-align: center;">:</td>
                 <td id="pdfNomorRef" style="vertical-align: top; font-weight: bold;">-</td>
               </tr>
@@ -170,67 +171,67 @@
               </tr>
             </table>
 
-            <!-- Tabel Kotak Checkbox Bersusun Vertikal (Sesuai Gambar Dokumen) -->
-            <div style="margin: 4px 0 8px 185px;">
+            <!-- Tabel Kotak Checkbox Bersusun Vertikal -->
+            <div style="margin: 4px 0 6px 180px;">
               <table style="border-collapse: collapse; font-size: 11px;">
                 <tr>
-                  <td id="boxInstalasi" style="width: 22px; height: 19px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
+                  <td id="boxInstalasi" style="width: 22px; height: 18px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
                   <td style="padding-left: 8px; font-weight: bold; vertical-align: middle;">INSTALASI</td>
                 </tr>
                 <tr>
-                  <td id="boxPerbaikan" style="width: 22px; height: 19px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
+                  <td id="boxPerbaikan" style="width: 22px; height: 18px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
                   <td style="padding-left: 8px; font-weight: bold; vertical-align: middle;">PERBAIKAN</td>
                 </tr>
                 <tr>
-                  <td id="boxKalibrasi" style="width: 22px; height: 19px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
+                  <td id="boxKalibrasi" style="width: 22px; height: 18px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
                   <td style="padding-left: 8px; font-weight: bold; vertical-align: middle;">KALIBRASI</td>
                 </tr>
                 <tr>
-                  <td id="boxPengadaan" style="width: 22px; height: 19px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
+                  <td id="boxPengadaan" style="width: 22px; height: 18px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
                   <td style="padding-left: 8px; font-weight: bold; vertical-align: middle;">PENGADAAN BARANG</td>
                 </tr>
                 <tr>
-                  <td id="boxLainnya" style="width: 22px; height: 19px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
+                  <td id="boxLainnya" style="width: 22px; height: 18px; border: 2px solid #000000; text-align: center; vertical-align: middle; font-weight: bold; font-size: 13px;"></td>
                   <td style="padding-left: 8px; font-weight: bold; vertical-align: middle;">LAINNYA</td>
                 </tr>
               </table>
             </div>
 
             <!-- Estimasi Waktu Perbaikan -->
-            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; line-height: 1.6;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 11.5px; line-height: 1.55;">
               <tr>
-                <td style="width: 170px; vertical-align: top;">Estimasi waktu perbaikan</td>
+                <td style="width: 165px; vertical-align: top;">Estimasi waktu perbaikan</td>
                 <td style="width: 15px; vertical-align: top; text-align: center;">:</td>
                 <td id="pdfEstimasi" style="vertical-align: top;">-</td>
               </tr>
             </table>
           </div>
 
-          <!-- 3. GARIS PEMBATAS TEGAS & SECTION KETERANGAN -->
+          <!-- 3. GARIS PEMBATAS & SECTION KETERANGAN -->
           <div style="border-top: 2px solid #000000; padding: 6px 14px; font-size: 11.5px;">
             <div style="margin-bottom: 2px;">Keterangan :</div>
-            <div id="pdfKeterangan" style="min-height: 48px; padding-left: 4px; line-height: 1.45; white-space: pre-wrap;">-</div>
+            <div id="pdfKeterangan" style="min-height: 42px; padding-left: 4px; line-height: 1.4; white-space: pre-wrap;">-</div>
           </div>
 
-          <!-- 4. GARIS PEMBATAS TEGAS & SECTION TANGGAL PELAKSANA -->
+          <!-- 4. GARIS PEMBATAS & SECTION TANGGAL PELAKSANA -->
           <div style="border-top: 2px solid #000000; padding: 5px 14px; font-size: 11.5px;">
             <table style="width: 100%; border-collapse: collapse; font-size: 11.5px;">
               <tr>
-                <td style="width: 170px;">Tgl. Pelaksana</td>
+                <td style="width: 165px;">Tgl. Pelaksana</td>
                 <td style="width: 15px; text-align: center;">:</td>
                 <td id="pdfTglPelaksana">-</td>
               </tr>
             </table>
           </div>
 
-          <!-- 5. GARIS PEMBATAS TEGAS & SECTION TANDA TANGAN -->
-          <div style="border-top: 2px solid #000000; padding: 16px 20px 20px 20px; font-size: 11.5px;">
+          <!-- 5. GARIS PEMBATAS & SECTION TANDA TANGAN (LENGKAP DENGAN BINGKAI BAWAH) -->
+          <div style="border-top: 2px solid #000000; padding: 14px 20px 16px 20px; font-size: 11.5px;">
             <table style="width: 100%; border-collapse: collapse; text-align: center; font-size: 11.5px;">
               <tr>
-                <td style="width: 50%; vertical-align: top; padding-bottom: 75px;">
+                <td style="width: 50%; vertical-align: top; padding-bottom: 60px;">
                   Diajukan oleh,
                 </td>
-                <td style="width: 50%; vertical-align: top; padding-bottom: 75px;">
+                <td style="width: 50%; vertical-align: top; padding-bottom: 60px;">
                   Disetujui oleh,
                 </td>
               </tr>
@@ -451,7 +452,7 @@
           class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800">
       </div>
 
-      <!-- Tombol Selesai (Hanya Proses Dokumen, Bebas Email Tiket) -->
+      <!-- Tombol Selesai -->
       <div class="flex items-center justify-between pt-4">
         <button type="submit" id="btnSubmit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-10 py-3 rounded-xl shadow-md hover:shadow-lg transition text-sm flex items-center space-x-2">
           <span>Selesai</span>
@@ -550,20 +551,33 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Unduh Dokumen PDF Resmi FM-IT-04
+    // Format Tanggal Indonesia (Contoh: 03 September 2026)
+    function formatIndoDate(dateStr) {
+      if (!dateStr) return "-";
+      var p = dateStr.split("-");
+      if (p.length === 3) {
+        var months = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+        var mIdx = parseInt(p[1], 10) - 1;
+        var day = ("0" + parseInt(p[2], 10)).slice(-2);
+        return day + " " + (months[mIdx] || p[1]) + " " + p[0];
+      }
+      return dateStr;
+    }
+
+    // Unduh Dokumen PDF Resmi FM-IT-04 (Locked A4 Single Page)
     function downloadPDF() {
       var element = document.getElementById('printableArea');
       var opt = {
-        margin:       [4, 4, 4, 4],
+        margin:       [8, 8, 8, 8],
         filename:     'Form_Perbaikan_IT_' + currentRefId + '.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+        html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 },
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
       html2pdf().set(opt).from(element).save();
     }
 
-    // Tombol Selesai: Langsung Munculkan Tampilan Contoh Kedua & PDF
+    // Tombol Selesai: Langsung Munculkan Dokumen Presisi A4
     document.getElementById("perbaikanForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
@@ -614,7 +628,7 @@
       document.getElementById("pdfKeluhan").innerText = keluhanVal || "-";
       document.getElementById("pdfEstimasi").innerText = strEstimasi || "-";
       document.getElementById("pdfKeterangan").innerText = keteranganVal || "-";
-      document.getElementById("pdfTglPelaksana").innerText = tglPelaksanaVal || "-";
+      document.getElementById("pdfTglPelaksana").innerText = formatIndoDate(tglPelaksanaVal);
       document.getElementById("pdfTtdPemohon").innerText = pemohonVal || "...................................................";
       document.getElementById("pdfTtdAtasan").innerText = atasanVal || "...................................................";
 
@@ -625,7 +639,7 @@
       document.getElementById("boxPengadaan").innerText = jenisPekerjaanArr.includes("PENGADAAN BARANG") ? "✓" : "";
       document.getElementById("boxLainnya").innerText = (jenisPekerjaanArr.length === 0 || (!jenisPekerjaanArr.includes("INSTALASI") && !jenisPekerjaanArr.includes("PERBAIKAN") && !jenisPekerjaanArr.includes("KALIBRASI") && !jenisPekerjaanArr.includes("PENGADAAN BARANG"))) ? "✓" : "";
 
-      // Langsung Tampilkan Halaman Sukses (Contoh Kedua) & Dokumen PDF
+      // Langsung Tampilkan Halaman Sukses & Dokumen PDF Utuh
       document.getElementById("perbaikanForm").classList.add("hidden");
       document.getElementById("successModal").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: 'smooth' });
