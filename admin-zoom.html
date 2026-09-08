@@ -204,7 +204,7 @@
     const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
     const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
     
-    // 👇 UBAH PASSWORD IT DI SINI:
+    // 👇 PASSWORD KHUSUS TIM IT:
     const CORRECT_PASSWORD = "ITGDM@2026";
 
     var allBookings = [];
@@ -265,8 +265,15 @@
           data.table.rows.forEach(function(r) {
             var c = r.c;
             if (c && c[0]) {
+              var tId = String(c[0].v || "").trim();
+              
+              // FILTER PENTING: Jangan masukkan baris judul kolom Google Sheet!
+              if (tId === "No. Tiket" || tId === "No." || tId.toLowerCase().indexOf("tiket") !== -1 && !tId.startsWith("ZM-")) {
+                return;
+              }
+
               allBookings.push({
-                ticketId: c[0] ? String(c[0].v).trim() : "-",
+                ticketId: tId || "-",
                 timestamp: c[1] ? String(c[1].f || c[1].v) : "-",
                 judul: c[2] ? String(c[2].v) : "-",
                 tanggal: c[3] ? String(c[3].f || c[3].v) : "-",
@@ -310,7 +317,7 @@
       }
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400">Tidak ada pengajuan pada filter ini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 font-medium">Belum ada pengajuan acara Zoom yang masuk.</td></tr>`;
         return;
       }
 
@@ -329,10 +336,10 @@
         if (b.status === "Menunggu Approval IT") {
           actionBtns = `
             <div class="flex items-center justify-center gap-1.5">
-              <button onclick="openApproveModal('${b.ticketId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] shadow">
+              <button onclick="openApproveModal('${b.ticketId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] shadow transition">
                 Setujui
               </button>
-              <button onclick="rejectBooking('${b.ticketId}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold px-2.5 py-1.5 rounded-lg text-[11px] border border-rose-200">
+              <button onclick="rejectBooking('${b.ticketId}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold px-2.5 py-1.5 rounded-lg text-[11px] border border-rose-200 transition">
                 Tolak
               </button>
             </div>
