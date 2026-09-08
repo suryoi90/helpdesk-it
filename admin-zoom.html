@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard Approval Zoom - PT Global Dispomedika</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen">
+
+  <!-- ================= SCREEN 1: LOGIN PASSWORD ADMIN IT ================= -->
+  <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center space-y-5 border border-slate-200">
+      <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-2xl font-bold shadow-inner">
+        🔐
+      </div>
+      <div>
+        <h2 class="text-xl font-extrabold text-slate-900">IT Administrator</h2>
+        <p class="text-xs text-slate-500 mt-1">Approval Dashboard Acara Zoom GDM-HO</p>
+      </div>
+
+      <div class="space-y-3">
+        <label class="block text-xs font-bold text-slate-700 text-left">Masukkan Password Khusus IT</label>
+        <div class="relative">
+          <input type="password" id="adminPasswordInput" placeholder="Ketik Password IT..." 
+            onkeydown="if(event.key==='Enter') checkPasswordLogin()"
+            class="w-full text-sm font-semibold py-3 pl-4 pr-11 border-2 border-slate-200 rounded-xl focus:border-indigo-600 outline-none transition">
+          <button type="button" onclick="togglePasswordVisibility()" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600 text-sm">
+            <span id="eyeIcon">👁️</span>
+          </button>
+        </div>
+
+        <p id="loginError" class="hidden text-xs text-rose-600 font-semibold">Password salah! Silakan periksa kembali.</p>
+        
+        <button type="button" onclick="checkPasswordLogin()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-md transition text-sm">
+          Masuk Dashboard
+        </button>
+      </div>
+      
+      <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-[11px] text-slate-500">
+        Password Default: <strong class="text-indigo-600 font-mono">ITGDM@2026</strong><br>
+        <span class="text-[10px] text-slate-400">(Dapat Anda ubah sendiri di dalam kode script)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCREEN 2: DASHBOARD APPROVAL IT ================= -->
+  <div id="dashboardScreen" class="hidden min-h-screen flex flex-col">
+    
+    <!-- Navbar -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow">📹</div>
+        <div>
+          <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-tight">Dashboard Approval Zoom GDM-HO</h1>
+          <p class="text-xs text-slate-500">PT Global Dispomedika • Administrator Panel</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="fetchScheduleData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3.5 py-2 rounded-xl border border-slate-300 transition flex items-center gap-1.5">
+          <span>🔄 Segarkan Data</span>
+        </button>
+        <button onclick="logoutAdmin()" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold px-3.5 py-2 rounded-xl border border-rose-200 transition">
+          Keluar (Logout)
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-5">
+      
+      <!-- Stats Summary -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-amber-600 uppercase">Menunggu Approval</p>
+            <h3 id="countPending" class="text-2xl font-extrabold text-slate-800 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">⏳</div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-emerald-600 uppercase">Telah Disetujui</p>
+            <h3 id="countApproved" class="text-2xl font-extrabold text-slate-800 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl font-bold">✓</div>
+        </div>
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-indigo-600 uppercase">Total Pengajuan</p>
+            <h3 id="countTotal" class="text-2xl font-extrabold text-slate-800 mt-1">0</h3>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">📋</div>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-600">Filter Status:</span>
+          <select id="filterStatus" onchange="renderBookingTable()" class="text-xs border border-slate-300 rounded-lg p-2 font-medium bg-white outline-none">
+            <option value="ALL">Semua Pengajuan</option>
+            <option value="Menunggu Approval IT" selected>Menunggu Approval Saja</option>
+            <option value="Disetujui">Disetujui</option>
+            <option value="Ditolak">Ditolak</option>
+          </select>
+        </div>
+        <div class="text-xs text-slate-500">
+          Kapasitas Terkelola: <strong>Akun Zoom 1, Akun Zoom 2, Akun Zoom 3</strong>
+        </div>
+      </div>
+
+      <!-- Tabel Daftar Pengajuan Zoom -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200 uppercase text-[10px] tracking-wider">
+              <tr>
+                <th class="p-4">No. Ref & Waktu</th>
+                <th class="p-4">Acara & Peserta</th>
+                <th class="p-4">Pemohon & Atasan</th>
+                <th class="p-4">Akun Zoom</th>
+                <th class="p-4">Status</th>
+                <th class="p-4 text-center">Tindakan IT</th>
+              </tr>
+            </thead>
+            <tbody id="bookingTableBody" class="divide-y divide-slate-100">
+              <tr>
+                <td colspan="6" class="text-center py-10 text-slate-400">Sedang memuat data dari spreadsheet...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ================= MODAL APPROVE (MASUKKAN LINK ZOOM) ================= -->
+  <div id="approveModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl border border-slate-200">
+      
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="font-extrabold text-slate-900 text-base flex items-center gap-2">
+          <span>Konfirmasi & Setujui Link Zoom</span>
+        </h3>
+        <button onclick="closeApproveModal()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+      </div>
+
+      <div class="bg-indigo-50/60 border border-indigo-100 p-3.5 rounded-xl text-xs space-y-1 text-slate-700">
+        <div><strong>No. Ref:</strong> <span id="modalTicketId" class="font-mono text-indigo-700 font-bold">-</span></div>
+        <div><strong>Acara:</strong> <span id="modalJudul">-</span></div>
+        <div><strong>Waktu:</strong> <span id="modalWaktu">-</span></div>
+        <div><strong>Pemohon:</strong> <span id="modalPemohon">-</span></div>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Pilih Akun Zoom Yang Ditugaskan <span class="text-red-500">*</span></label>
+          <select id="modalAkunZoom" class="w-full border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-800 outline-none focus:border-indigo-600 bg-white">
+            <option value="1">Akun Zoom 1</option>
+            <option value="2">Akun Zoom 2</option>
+            <option value="3">Akun Zoom 3</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Tautan / Link Meeting Zoom <span class="text-red-500">*</span></label>
+          <input type="url" id="modalZoomUrl" placeholder="https://us02web.zoom.us/j/1234567890?pwd=..." 
+            class="w-full border border-slate-300 rounded-xl p-2.5 text-xs text-slate-800 outline-none focus:border-indigo-600">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Meeting ID</label>
+            <input type="text" id="modalMeetingId" placeholder="123 4567 8900" 
+              class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-mono text-slate-800 outline-none focus:border-indigo-600">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">Passcode</label>
+            <input type="text" id="modalPasscode" placeholder="123456" 
+              class="w-full border border-slate-300 rounded-xl p-2.5 text-xs font-mono text-slate-800 outline-none focus:border-indigo-600">
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end gap-2">
+        <button type="button" onclick="closeApproveModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-semibold text-xs hover:bg-slate-100">
+          Batal
+        </button>
+        <button type="button" id="btnConfirmApprove" onclick="executeApprove()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow flex items-center gap-1.5">
+          <span>✓ Setujui & Kirim Email ke Pemohon</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzqyb_Il5JX_Cgw2EzgM857sXucWznafsmDU_kFuu0ZeMVOLx-8gWHr1ueXRFFF7bwo/exec";
+    const SHEET_ID = "13VxrMTdeosoyi3dNQZ2Ahm6wlf2dr-zvg9yZ9lAZHt4";
+    
+    // 👇 UBAH PASSWORD IT DI SINI:
+    const CORRECT_PASSWORD = "ITGDM@2026";
+
+    var allBookings = [];
+    var currentItem = null;
+
+    window.addEventListener("DOMContentLoaded", function() {
+      if (sessionStorage.getItem("adminAuth") === "true") {
+        showDashboard();
+      }
+    });
+
+    function togglePasswordVisibility() {
+      var passInput = document.getElementById("adminPasswordInput");
+      var eyeIcon = document.getElementById("eyeIcon");
+      if (passInput.type === "password") {
+        passInput.type = "text";
+        eyeIcon.innerText = "🙈";
+      } else {
+        passInput.type = "password";
+        eyeIcon.innerText = "👁️";
+      }
+    }
+
+    function checkPasswordLogin() {
+      var pass = document.getElementById("adminPasswordInput").value;
+      if (pass === CORRECT_PASSWORD) {
+        sessionStorage.setItem("adminAuth", "true");
+        showDashboard();
+      } else {
+        document.getElementById("loginError").classList.remove("hidden");
+      }
+    }
+
+    function showDashboard() {
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("dashboardScreen").classList.remove("hidden");
+      fetchScheduleData();
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem("adminAuth");
+      location.reload();
+    }
+
+    async function fetchScheduleData() {
+      var tbody = document.getElementById("bookingTableBody");
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400">Sedang mengambil data terbaru...</td></tr>`;
+
+      try {
+        var gvizUrl = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json&sheet=JADWAL%20ZOOM";
+        var res = await fetch(gvizUrl);
+        var text = await res.text();
+        var jsonText = text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1);
+        var data = JSON.parse(jsonText);
+
+        allBookings = [];
+        if (data && data.table && data.table.rows) {
+          data.table.rows.forEach(function(r) {
+            var c = r.c;
+            if (c && c[0]) {
+              allBookings.push({
+                ticketId: c[0] ? String(c[0].v).trim() : "-",
+                timestamp: c[1] ? String(c[1].f || c[1].v) : "-",
+                judul: c[2] ? String(c[2].v) : "-",
+                tanggal: c[3] ? String(c[3].f || c[3].v) : "-",
+                mulai: c[4] ? String(c[4].f || c[4].v) : "-",
+                selesai: c[5] ? String(c[5].f || c[5].v) : "-",
+                peserta: c[6] ? String(c[6].v) : "-",
+                recording: c[7] ? String(c[7].v) : "-",
+                emailPemohon: c[8] ? String(c[8].v) : "-",
+                emailAtasan: c[9] ? String(c[9].v) : "-",
+                status: c[10] ? String(c[10].v).trim() : "Menunggu Approval IT",
+                akunZoom: c[11] ? String(c[11].v) : "1",
+                zoomUrl: c[12] ? String(c[12].v) : ""
+              });
+            }
+          });
+        }
+      } catch (e) {
+        console.log("Fetch error:", e);
+      }
+
+      updateStats();
+      renderBookingTable();
+    }
+
+    function updateStats() {
+      var pending = allBookings.filter(function(b) { return b.status === "Menunggu Approval IT"; }).length;
+      var approved = allBookings.filter(function(b) { return b.status === "Disetujui"; }).length;
+      document.getElementById("countPending").innerText = pending;
+      document.getElementById("countApproved").innerText = approved;
+      document.getElementById("countTotal").innerText = allBookings.length;
+    }
+
+    function renderBookingTable() {
+      var filter = document.getElementById("filterStatus").value;
+      var tbody = document.getElementById("bookingTableBody");
+      tbody.innerHTML = "";
+
+      var list = allBookings;
+      if (filter !== "ALL") {
+        list = allBookings.filter(function(b) { return b.status === filter; });
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400">Tidak ada pengajuan pada filter ini.</td></tr>`;
+        return;
+      }
+
+      list.forEach(function(b) {
+        var tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+
+        var statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Menunggu Approval IT</span>`;
+        if (b.status === "Disetujui") {
+          statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Disetujui</span>`;
+        } else if (b.status === "Ditolak") {
+          statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">✗ Ditolak</span>`;
+        }
+
+        var actionBtns = "";
+        if (b.status === "Menunggu Approval IT") {
+          actionBtns = `
+            <div class="flex items-center justify-center gap-1.5">
+              <button onclick="openApproveModal('${b.ticketId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] shadow">
+                Setujui
+              </button>
+              <button onclick="rejectBooking('${b.ticketId}')" class="bg-rose-50 hover:bg-rose-100 text-rose-600 font-semibold px-2.5 py-1.5 rounded-lg text-[11px] border border-rose-200">
+                Tolak
+              </button>
+            </div>
+          `;
+        } else {
+          actionBtns = `<span class="text-[11px] text-slate-400 italic">Selesai</span>`;
+        }
+
+        tr.innerHTML = `
+          <td class="p-4">
+            <div class="font-mono font-bold text-indigo-600">${b.ticketId}</div>
+            <div class="text-slate-800 font-semibold mt-0.5">${b.tanggal}</div>
+            <div class="text-slate-500 text-[11px]">${b.mulai} - ${b.selesai} WIB</div>
+          </td>
+          <td class="p-4">
+            <div class="font-bold text-slate-800">${b.judul}</div>
+            <div class="text-slate-500 text-[11px] mt-0.5">${b.peserta} • Rec: ${b.recording}</div>
+          </td>
+          <td class="p-4">
+            <div class="font-semibold text-slate-800">${b.emailPemohon}</div>
+            <div class="text-slate-400 text-[11px]">Atasan: ${b.emailAtasan}</div>
+          </td>
+          <td class="p-4">
+            <span class="font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded-md">Akun ${b.akunZoom || "1"}</span>
+          </td>
+          <td class="p-4">${statusBadge}</td>
+          <td class="p-4 text-center">${actionBtns}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openApproveModal(ticketId) {
+      currentItem = allBookings.find(function(b) { return b.ticketId === ticketId; });
+      if (!currentItem) return;
+
+      document.getElementById("modalTicketId").innerText = currentItem.ticketId;
+      document.getElementById("modalJudul").innerText = currentItem.judul;
+      document.getElementById("modalWaktu").innerText = currentItem.tanggal + " (" + currentItem.mulai + " - " + currentItem.selesai + " WIB)";
+      document.getElementById("modalPemohon").innerText = currentItem.emailPemohon;
+      document.getElementById("modalAkunZoom").value = currentItem.akunZoom || "1";
+      document.getElementById("modalZoomUrl").value = "";
+      document.getElementById("modalMeetingId").value = "";
+      document.getElementById("modalPasscode").value = "";
+
+      document.getElementById("approveModal").classList.remove("hidden");
+    }
+
+    function closeApproveModal() {
+      document.getElementById("approveModal").classList.add("hidden");
+      currentItem = null;
+    }
+
+    async function executeApprove() {
+      if (!currentItem) return;
+
+      var zoomUrl = document.getElementById("modalZoomUrl").value.trim();
+      var meetingId = document.getElementById("modalMeetingId").value.trim();
+      var passcode = document.getElementById("modalPasscode").value.trim();
+      var akun = document.getElementById("modalAkunZoom").value;
+
+      if (!zoomUrl) {
+        alert("Harap masukkan Tautan Link Meeting Zoom!");
+        return;
+      }
+
+      var btn = document.getElementById("btnConfirmApprove");
+      btn.innerText = "Memproses & Mengirim Email...";
+      btn.disabled = true;
+
+      var payload = {
+        action: "approveZoom",
+        ticketId: currentItem.ticketId,
+        "Judul Acara": currentItem.judul,
+        "Tanggal acara": currentItem.tanggal,
+        "Waktu Acara": currentItem.mulai + " - " + currentItem.selesai + " WIB",
+        "Email pemohon": currentItem.emailPemohon,
+        "Email atasan pemohon": currentItem.emailAtasan,
+        "Akun Zoom": akun,
+        "Zoom URL": zoomUrl,
+        "Meeting ID": meetingId,
+        "Passcode": passcode
+      };
+
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {}
+
+      currentItem.status = "Disetujui";
+      currentItem.zoomUrl = zoomUrl;
+      currentItem.akunZoom = akun;
+
+      btn.innerText = "✓ Selesai";
+      setTimeout(function() {
+        closeApproveModal();
+        btn.innerText = "✓ Setujui & Kirim Email ke Pemohon";
+        btn.disabled = false;
+        updateStats();
+        renderBookingTable();
+      }, 800);
+    }
+
+    async function rejectBooking(ticketId) {
+      var reason = prompt("Masukkan alasan penolakan jadwal (akan dikirimkan ke pemohon):", "Jadwal penuh pada jam tersebut");
+      if (reason === null) return;
+
+      var item = allBookings.find(function(b) { return b.ticketId === ticketId; });
+      if (!item) return;
+
+      var payload = {
+        action: "rejectZoom",
+        ticketId: item.ticketId,
+        "Judul Acara": item.judul,
+        "Tanggal acara": item.tanggal,
+        "Email pemohon": item.emailPemohon,
+        "Email atasan pemohon": item.emailAtasan,
+        "Alasan": reason
+      };
+
+      try {
+        await fetch(API_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {}
+
+      item.status = "Ditolak";
+      updateStats();
+      renderBookingTable();
+    }
+  </script>
+</body>
+</html>
