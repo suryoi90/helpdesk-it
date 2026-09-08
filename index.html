@@ -123,15 +123,16 @@
       <!-- 4. Jenis Pengajuan (Dengan Redirect ke perbaikan.html) -->
       <div class="bg-white rounded-2xl shadow-sm p-6 focus-within:ring-2 focus-within:ring-indigo-500 transition">
         <label class="block text-gray-800 font-semibold text-sm mb-2">Jenis pengajuan <span class="text-red-500">*</span></label>
-        <select id="selectJenisPengajuan" name="Jenis pengajuan" required onchange="handleJenisPengajuanChange(this.value)" class="w-full border border-gray-300 rounded-xl p-3 text-sm text-gray-700 outline-none focus:border-indigo-600 bg-white">
-          <option value="" disabled selected>Pilih</option>
-          <option value="Kendala / Gangguan">Kendala / Gangguan</option>
-          <option value="Permintaan Layanan">Permintaan Layanan</option>
-          <option value="Permintaan Akses">Permintaan Akses</option>
-          <option value="Permintaan Perubahan">Permintaan Perubahan</option>
-          <option value="Keamanan Informasi">Keamanan Informasi</option>
-          <option value="Pengelolaan Aset IT">Pengelolaan Aset IT (Form Pengajuan Perbaikan IT)</option>
-        </select>
+        <select id="jenisPengajuan" name="Jenis pengajuan" required class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 text-sm text-gray-800 bg-transparent">
+  <option value="" disabled selected>Pilih</option>
+  <option value="Kendala / Gangguan">Kendala / Gangguan</option>
+  <option value="Permintaan Layanan">Permintaan Layanan</option>
+  <option value="Permintaan Akses">Permintaan Akses</option>
+  <option value="Permintaan Perubahan">Permintaan Perubahan</option>
+  <option value="Keamanan Informasi">Keamanan Informasi</option>
+  <option value="Pengelolaan Aset IT (Form Pengajuan Perbaikan IT)">Pengelolaan Aset IT (Form Pengajuan Perbaikan IT)</option>
+  <option value="Permintaan Zoom Link (Form Permintaan Acara Zoom GDM-HO)">Permintaan Zoom Link (Form Permintaan Acara Zoom GDM-HO)</option>
+</select>
 
         <!-- Kotak Banner Pengalihan Khusus Form Pengajuan Perbaikan IT -->
         <div id="boxPengelolaanAset" class="hidden mt-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl space-y-3">
@@ -144,6 +145,22 @@
               </p>
             </div>
           </div>
+          <!-- Kotak Banner Pengalihan Khusus Form Permintaan Acara Zoom GDM-HO -->
+<div id="boxZoomLink" class="hidden mt-4 p-4 bg-indigo-50 border border-indigo-200 rounded-xl space-y-3">
+  <div class="flex items-start gap-3">
+    <div class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-base shadow">📹</div>
+    <div>
+      <h4 class="text-sm font-bold text-indigo-900">Form Permintaan Acara Zoom GDM-HO</h4>
+      <p class="text-xs text-indigo-700 mt-0.5 leading-relaxed">
+        Permintaan link dan jadwal Zoom diproses melalui formulir khusus. Tab baru telah dibuka otomatis. Anda juga dapat mengklik tombol di bawah jika tab tidak terbuka:
+      </p>
+      <a href="/zoom.html" target="_blank" class="inline-flex items-center gap-1.5 mt-2.5 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow transition">
+        <span>Buka Form Permintaan Acara Zoom</span>
+        <span>↗</span>
+      </a>
+    </div>
+  </div>
+</div>
           <a href="/perbaikan.html" target="_blank"
              class="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-xl shadow transition">
             <span>Buka Form Pengajuan Perbaikan IT</span>
@@ -449,20 +466,33 @@
       loadAllEmployees();
     });
 
-    // Kontrol Pengalihan Pengelolaan Aset IT (Form Pengajuan Perbaikan IT)
-    function handleJenisPengajuanChange(val) {
-      var isAsetIT = (val.indexOf("Pengelolaan Aset IT") !== -1);
-      document.getElementById("boxPengelolaanAset").classList.toggle("hidden", !isAsetIT);
-      document.getElementById("regularFormFields").classList.toggle("hidden", isAsetIT);
+    // Kontrol Pengalihan Pengelolaan Aset IT & Permintaan Zoom Link
+function handleJenisPengajuanChange(val) {
+  var isAsetIT = (val.indexOf("Pengelolaan Aset IT") !== -1);
+  var isZoom = (val.indexOf("Zoom") !== -1);
+  var isRedirect = isAsetIT || isZoom;
 
-      var deskripsi = document.getElementById("deskripsiKendala");
-      if (deskripsi) deskripsi.required = !isAsetIT;
+  // Tampilkan box info perbaikan jika pilih Aset IT
+  var boxAset = document.getElementById("boxPengelolaanAset");
+  if (boxAset) boxAset.classList.toggle("hidden", !isAsetIT);
 
-      if (isAsetIT) {
-        // Otomatis buka form perbaikan di tab baru
-        window.open(FORM_PERBAIKAN_URL, "_blank");
-      }
-    }
+  // Tampilkan box info zoom jika ada
+  var boxZoom = document.getElementById("boxZoomLink");
+  if (boxZoom) boxZoom.classList.toggle("hidden", !isZoom);
+
+  // Sembunyikan form biasa agar tidak mengisi dobel
+  document.getElementById("regularFormFields").classList.toggle("hidden", isRedirect);
+
+  var deskripsi = document.getElementById("deskripsiKendala");
+  if (deskripsi) deskripsi.required = !isRedirect;
+
+  // Buka tab baru sesuai pilihan
+  if (isAsetIT) {
+    window.open(FORM_PERBAIKAN_URL, "_blank");
+  } else if (isZoom) {
+    window.open("/zoom.html", "_blank");
+  }
+}
 
     // Kontrol Kategori Inti
     function handleCategoryChange() {
