@@ -98,8 +98,8 @@
         </div>
       </div>
 
-      <!-- Filter Bar -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
+      <!-- Filter Bar & Info Akun Zoom -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold text-slate-600">Filter Status:</span>
           <select id="filterStatus" onchange="renderBookingTable()" class="text-xs border border-slate-300 rounded-lg p-2 font-medium bg-white outline-none">
@@ -109,8 +109,18 @@
             <option value="Ditolak">Ditolak</option>
           </select>
         </div>
-        <div class="text-xs text-slate-500">
-          Kapasitas Terkelola: <strong>Akun Zoom 1, Akun Zoom 2, Akun Zoom 3</strong>
+        
+        <!-- Info Akun Zoom IT -->
+        <div class="flex flex-wrap gap-2 text-[11px]">
+          <span class="bg-indigo-50 text-indigo-700 border border-indigo-100 px-2.5 py-1 rounded-lg font-medium">
+            <strong>Akun 1:</strong> zoom.gdm@globaldispomedika.com
+          </span>
+          <span class="bg-blue-50 text-blue-700 border border-blue-100 px-2.5 py-1 rounded-lg font-medium">
+            <strong>Akun 2:</strong> suryavirtu@gmail.com
+          </span>
+          <span class="bg-teal-50 text-teal-700 border border-teal-100 px-2.5 py-1 rounded-lg font-medium">
+            <strong>Akun 3:</strong> zoom.lima@globaldispomedika.com
+          </span>
         </div>
       </div>
 
@@ -123,7 +133,7 @@
                 <th class="p-4">No. Ref & Waktu</th>
                 <th class="p-4">Acara & Peserta</th>
                 <th class="p-4">Pemohon & Atasan</th>
-                <th class="p-4">Akun Zoom</th>
+                <th class="p-4">Akun Zoom Terpilih</th>
                 <th class="p-4">Status</th>
                 <th class="p-4 text-center">Tindakan IT</th>
               </tr>
@@ -162,9 +172,9 @@
         <div>
           <label class="block font-bold text-slate-700 mb-1">Pilih Akun Zoom Yang Ditugaskan <span class="text-red-500">*</span></label>
           <select id="modalAkunZoom" class="w-full border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-800 outline-none focus:border-indigo-600 bg-white">
-            <option value="1">Akun Zoom 1</option>
-            <option value="2">Akun Zoom 2</option>
-            <option value="3">Akun Zoom 3</option>
+            <option value="1">Akun 1 (zoom.gdm@globaldispomedika.com)</option>
+            <option value="2">Akun 2 (suryavirtu@gmail.com)</option>
+            <option value="3">Akun 3 (zoom.lima@globaldispomedika.com)</option>
           </select>
         </div>
 
@@ -207,16 +217,30 @@
     // 👇 PASSWORD KHUSUS TIM IT:
     const CORRECT_PASSWORD = "ITGDM@2026";
 
+    // PETA AKUN ZOOM KE EMAIL IT RESMI
+    const ZOOM_ACCOUNTS = {
+      "1": { name: "Akun Zoom 1", email: "zoom.gdm@globaldispomedika.com", badge: "bg-indigo-50 text-indigo-700 border-indigo-200" },
+      "2": { name: "Akun Zoom 2", email: "suryavirtu@gmail.com", badge: "bg-blue-50 text-blue-700 border-blue-200" },
+      "3": { name: "Akun Zoom 3", email: "zoom.lima@globaldispomedika.com", badge: "bg-teal-50 text-teal-700 border-teal-200" }
+    };
+
+    function getZoomAccountInfo(val) {
+      var str = String(val || "").trim();
+      if (str === "1" || str.toLowerCase() === "zoom 1" || str.toLowerCase() === "akun zoom 1") return ZOOM_ACCOUNTS["1"];
+      if (str === "2" || str.toLowerCase() === "zoom 2" || str.toLowerCase() === "akun zoom 2") return ZOOM_ACCOUNTS["2"];
+      if (str === "3" || str.toLowerCase() === "zoom 3" || str.toLowerCase() === "akun zoom 3") return ZOOM_ACCOUNTS["3"];
+      // default
+      return ZOOM_ACCOUNTS["1"];
+    }
+
     var allBookings = [];
     var currentItem = null;
 
     // FUNGSI KONVERSI TANGGAL KE FORMAT dd-mm-yyyy
     function formatDateIndo(rawDate) {
       if (!rawDate || rawDate === "-") return "-";
-      
       var str = String(rawDate).trim();
 
-      // Jika format Date(yyyy,m,d) dari gviz
       if (str.startsWith("Date(")) {
         var parts = str.replace("Date(", "").replace(")", "").split(",");
         if (parts.length >= 3) {
@@ -227,7 +251,6 @@
         }
       }
 
-      // Jika format YYYY-MM-DD
       var matchYMD = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
       if (matchYMD) {
         var yyyy = matchYMD[1];
@@ -236,7 +259,6 @@
         return dd + "-" + mm + "-" + yyyy;
       }
 
-      // Jika format DD-MM-YYYY atau DD/MM/YYYY sudah benar
       var matchDMY = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
       if (matchDMY) {
         var d2 = matchDMY[1].padStart(2, "0");
@@ -245,7 +267,6 @@
         return d2 + "-" + m2 + "-" + y2;
       }
 
-      // Jika string parseable oleh new Date
       var parsed = new Date(str);
       if (!isNaN(parsed.getTime())) {
         var day = String(parsed.getDate()).padStart(2, "0");
@@ -314,7 +335,6 @@
             if (c && c[0]) {
               var tId = String(c[0].v || "").trim();
               
-              // FILTER PENTING: Jangan masukkan baris judul kolom Google Sheet!
               if (tId === "No. Tiket" || tId === "No." || (tId.toLowerCase().indexOf("tiket") !== -1 && !tId.startsWith("ZM-"))) {
                 return;
               }
@@ -325,7 +345,7 @@
                 ticketId: tId || "-",
                 timestamp: c[1] ? String(c[1].f || c[1].v) : "-",
                 judul: c[2] ? String(c[2].v) : "-",
-                tanggal: formatDateIndo(rawTgl), // DIUBAH MENJADI dd-mm-yyyy
+                tanggal: formatDateIndo(rawTgl),
                 mulai: c[4] ? String(c[4].f || c[4].v) : "-",
                 selesai: c[5] ? String(c[5].f || c[5].v) : "-",
                 peserta: c[6] ? String(c[6].v) : "-",
@@ -397,6 +417,8 @@
           actionBtns = `<span class="text-[11px] text-slate-400 italic">Selesai</span>`;
         }
 
+        var accInfo = getZoomAccountInfo(b.akunZoom);
+
         tr.innerHTML = `
           <td class="p-4">
             <div class="font-mono font-bold text-indigo-600">${b.ticketId}</div>
@@ -412,7 +434,10 @@
             <div class="text-slate-400 text-[11px]">Atasan: ${b.emailAtasan}</div>
           </td>
           <td class="p-4">
-            <span class="font-bold text-slate-700 bg-slate-100 px-2 py-1 rounded-md">Akun ${b.akunZoom || "1"}</span>
+            <div class="border ${accInfo.badge} px-2.5 py-1.5 rounded-xl inline-block max-w-[210px]">
+              <div class="font-bold text-[11px]">${accInfo.name}</div>
+              <div class="font-mono text-[10px] break-all leading-tight opacity-90">${accInfo.email}</div>
+            </div>
           </td>
           <td class="p-4">${statusBadge}</td>
           <td class="p-4 text-center">${actionBtns}</td>
@@ -430,7 +455,13 @@
       document.getElementById("modalJudul").innerText = currentItem.judul;
       document.getElementById("modalWaktu").innerText = currentItem.tanggal + " (" + currentItem.mulai + " - " + currentItem.selesai + " WIB)";
       document.getElementById("modalPemohon").innerText = currentItem.emailPemohon;
-      document.getElementById("modalAkunZoom").value = currentItem.akunZoom || "1";
+      
+      var rawAcc = String(currentItem.akunZoom || "").trim();
+      var accVal = "1";
+      if (rawAcc.indexOf("2") !== -1) accVal = "2";
+      else if (rawAcc.indexOf("3") !== -1) accVal = "3";
+      document.getElementById("modalAkunZoom").value = accVal;
+
       document.getElementById("modalZoomUrl").value = "";
       document.getElementById("modalMeetingId").value = "";
       document.getElementById("modalPasscode").value = "";
