@@ -210,6 +210,53 @@
     var allBookings = [];
     var currentItem = null;
 
+    // FUNGSI KONVERSI TANGGAL KE FORMAT dd-mm-yyyy
+    function formatDateIndo(rawDate) {
+      if (!rawDate || rawDate === "-") return "-";
+      
+      var str = String(rawDate).trim();
+
+      // Jika format Date(yyyy,m,d) dari gviz
+      if (str.startsWith("Date(")) {
+        var parts = str.replace("Date(", "").replace(")", "").split(",");
+        if (parts.length >= 3) {
+          var y = parts[0].trim();
+          var m = String(parseInt(parts[1].trim()) + 1).padStart(2, "0");
+          var d = String(parts[2].trim()).padStart(2, "0");
+          return d + "-" + m + "-" + y;
+        }
+      }
+
+      // Jika format YYYY-MM-DD
+      var matchYMD = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+      if (matchYMD) {
+        var yyyy = matchYMD[1];
+        var mm = matchYMD[2].padStart(2, "0");
+        var dd = matchYMD[3].padStart(2, "0");
+        return dd + "-" + mm + "-" + yyyy;
+      }
+
+      // Jika format DD-MM-YYYY atau DD/MM/YYYY sudah benar
+      var matchDMY = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
+      if (matchDMY) {
+        var d2 = matchDMY[1].padStart(2, "0");
+        var m2 = matchDMY[2].padStart(2, "0");
+        var y2 = matchDMY[3];
+        return d2 + "-" + m2 + "-" + y2;
+      }
+
+      // Jika string parseable oleh new Date
+      var parsed = new Date(str);
+      if (!isNaN(parsed.getTime())) {
+        var day = String(parsed.getDate()).padStart(2, "0");
+        var month = String(parsed.getMonth() + 1).padStart(2, "0");
+        var year = parsed.getFullYear();
+        return day + "-" + month + "-" + year;
+      }
+
+      return str;
+    }
+
     window.addEventListener("DOMContentLoaded", function() {
       if (sessionStorage.getItem("adminAuth") === "true") {
         showDashboard();
@@ -268,15 +315,17 @@
               var tId = String(c[0].v || "").trim();
               
               // FILTER PENTING: Jangan masukkan baris judul kolom Google Sheet!
-              if (tId === "No. Tiket" || tId === "No." || tId.toLowerCase().indexOf("tiket") !== -1 && !tId.startsWith("ZM-")) {
+              if (tId === "No. Tiket" || tId === "No." || (tId.toLowerCase().indexOf("tiket") !== -1 && !tId.startsWith("ZM-"))) {
                 return;
               }
+
+              var rawTgl = c[3] ? (c[3].f || c[3].v) : "-";
 
               allBookings.push({
                 ticketId: tId || "-",
                 timestamp: c[1] ? String(c[1].f || c[1].v) : "-",
                 judul: c[2] ? String(c[2].v) : "-",
-                tanggal: c[3] ? String(c[3].f || c[3].v) : "-",
+                tanggal: formatDateIndo(rawTgl), // DIUBAH MENJADI dd-mm-yyyy
                 mulai: c[4] ? String(c[4].f || c[4].v) : "-",
                 selesai: c[5] ? String(c[5].f || c[5].v) : "-",
                 peserta: c[6] ? String(c[6].v) : "-",
