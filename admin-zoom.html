@@ -102,8 +102,8 @@
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold text-slate-600">Filter Status:</span>
           <select id="filterStatus" onchange="renderBookingTable()" class="text-xs border border-slate-300 rounded-lg p-2 font-medium bg-white outline-none">
-            <option value="ALL">Semua Pengajuan</option>
-            <option value="PENDING" selected>Menunggu Approval Saja</option>
+            <option value="ALL" selected>Semua Pengajuan</option>
+            <option value="PENDING">Menunggu Approval Saja</option>
             <option value="APPROVED">Disetujui</option>
             <option value="REJECTED">Ditolak</option>
           </select>
@@ -129,8 +129,8 @@
             <thead class="bg-slate-50 text-slate-500 font-bold border-b border-slate-200 uppercase text-[10px] tracking-wider">
               <tr>
                 <th class="p-4">No. Ref & Waktu</th>
-                <th class="p-4">Acara & Peserta</th>
-                <th class="p-4">Pemohon & Atasan</th>
+                <th class="p-4">Acara / Topik</th>
+                <th class="p-4">Pemohon</th>
                 <th class="p-4">Akun Zoom Terpilih</th>
                 <th class="p-4">Status</th>
                 <th class="p-4 text-center">Tindakan IT</th>
@@ -170,9 +170,9 @@
         <div>
           <label class="block font-bold text-slate-700 mb-1">Pilih Akun Zoom Yang Ditugaskan <span class="text-red-500">*</span></label>
           <select id="modalAkunZoom" class="w-full border border-slate-300 rounded-xl p-2.5 font-semibold text-slate-800 outline-none focus:border-indigo-600 bg-white">
-            <option value="1">Akun 1 (zoom.gdm@globaldispomedika.com)</option>
-            <option value="2">Akun 2 (suryavirtu@gmail.com)</option>
-            <option value="3">Akun 3 (zoom.lima@globaldispomedika.com)</option>
+            <option value="Zoom 1">Akun 1 (zoom.gdm@globaldispomedika.com)</option>
+            <option value="Zoom 2">Akun 2 (suryavirtu@gmail.com)</option>
+            <option value="Zoom 3">Akun 3 (zoom.lima@globaldispomedika.com)</option>
           </select>
         </div>
 
@@ -226,10 +226,10 @@
       return ZOOM_ACCOUNTS["1"];
     }
 
-    // Ubah Time Google Sheet (Date(1899,11,30,9,0,0) atau desimal) menjadi HH:mm
+    // Ubah Waktu Google Sheets ke Format Jam (HH:mm)
     function parseGSheetTime(cell) {
-      if (!cell) return "-";
-      if (cell.f) return cell.f;
+      if (!cell) return "";
+      if (cell.f && cell.f.indexOf(":") !== -1) return cell.f;
       var v = cell.v;
       if (typeof v === "string" && v.startsWith("Date(")) {
         var parts = v.replace("Date(", "").replace(")", "").split(",");
@@ -239,7 +239,7 @@
           return h + ":" + min;
         }
       }
-      if (typeof v === "number") {
+      if (typeof v === "number" && v < 1) {
         var totalSec = Math.round(v * 86400);
         var hh = Math.floor(totalSec / 3600);
         var mm = Math.floor((totalSec % 3600) / 60);
@@ -248,13 +248,14 @@
       var str = String(v).trim();
       var m = str.match(/(\d{1,2})[:.](\d{2})/);
       if (m) return m[1].padStart(2, "0") + ":" + m[2];
-      return str;
+      return "";
     }
 
     // Ubah Tanggal ke dd-mm-yyyy
-    function formatDateIndo(rawDate) {
-      if (!rawDate || rawDate === "-") return "-";
-      var str = String(rawDate).trim();
+    function parseGSheetDate(cell) {
+      if (!cell) return "";
+      var str = String(cell.f || cell.v || "").trim();
+      if (!str || str === "-") return "";
 
       if (str.startsWith("Date(")) {
         var parts = str.replace("Date(", "").replace(")", "").split(",");
@@ -267,24 +268,18 @@
       }
 
       var matchYMD = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-      if (matchYMD) {
-        return matchYMD[3].padStart(2, "0") + "-" + matchYMD[2].padStart(2, "0") + "-" + matchYMD[1];
-      }
+      if (matchYMD) return matchYMD[3].padStart(2, "0") + "-" + matchYMD[2].padStart(2, "0") + "-" + matchYMD[1];
 
       var matchDMY = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
-      if (matchDMY) {
-        return matchDMY[1].padStart(2, "0") + "-" + matchDMY[2].padStart(2, "0") + "-" + matchDMY[3];
-      }
+      if (matchDMY) return matchDMY[1].padStart(2, "0") + "-" + matchDMY[2].padStart(2, "0") + "-" + matchDMY[3];
 
       var parsed = new Date(str);
-      if (!isNaN(parsed.getTime())) {
+      if (!isNaN(parsed.getTime()) && parsed.getFullYear() > 2000) {
         var day = String(parsed.getDate()).padStart(2, "0");
         var month = String(parsed.getMonth() + 1).padStart(2, "0");
-        var year = parsed.getFullYear();
-        return day + "-" + month + "-" + year;
+        return day + "-" + month + "-" + parsed.getFullYear();
       }
-
-      return str;
+      return "";
     }
 
     var allBookings = [];
@@ -351,47 +346,86 @@
               return;
             }
 
-            // PEMETAAN POSISI KOLOM PERSIS DARI TABEL ASLI ANDA:
-            // c[0] = No Tiket
-            // c[1] = Timestamp
-            // c[2] = Judul Acara
-            // c[3] = Tanggal
-            // c[4] = Jam Mulai
-            // c[5] = Jam Selesai
-            // c[6] = Peserta
-            // c[7] = Recording
-            // c[8] = Email Pemohon
-            // c[9] = Email Atasan
-            // c[10]= Status Approval
-            // c[11]= Akun Zoom
-            // c[12]= Link Zoom
+            var tglVal = "";
+            var times = [];
+            var emails = [];
+            var longTexts = [];
+            var statusVal = "Menunggu IT";
+            var akunVal = "Zoom 1";
+            var linkVal = "";
 
-            var rawJudul = c[2] ? String(c[2].v) : "Acara Zoom";
-            var rawTgl = c[3] ? (c[3].f || c[3].v) : "-";
-            var mulaiRaw = parseGSheetTime(c[4]);
-            var selesaiRaw = parseGSheetTime(c[5]);
-            var rawPeserta = c[6] ? String(c[6].v) : "-";
-            var rawRec = c[7] ? String(c[7].v) : "-";
-            var rawEmail = c[8] ? String(c[8].v) : "-";
-            var rawAtasan = c[9] ? String(c[9].v) : "-";
-            var rawStatus = c[10] ? String(c[10].v).trim() : "Menunggu Approval IT";
-            var rawAkun = c[11] ? String(c[11].v) : "1";
-            var rawLink = c[12] ? String(c[12].v) : "";
+            c.forEach(function(cell, idx) {
+              if (idx === 0 || !cell) return;
+              var rawStr = String(cell.f || cell.v || "").trim();
+
+              // 1. Tanggal
+              if (!tglVal) {
+                var parsedD = parseGSheetDate(cell);
+                if (parsedD) { tglVal = parsedD; return; }
+              }
+
+              // 2. Jam
+              var parsedT = parseGSheetTime(cell);
+              if (parsedT) {
+                times.push(parsedT);
+                return;
+              }
+
+              // 3. Email
+              if (rawStr.indexOf("@") !== -1) {
+                emails.push(rawStr);
+                return;
+              }
+
+              // 4. Status
+              var upper = rawStr.toUpperCase();
+              if (upper === "PENDING" || upper.indexOf("MENUNGGU") !== -1) {
+                statusVal = "Menunggu IT";
+                return;
+              } else if (upper === "APPROVED" || upper === "DISETUJUI") {
+                statusVal = "Disetujui";
+                return;
+              } else if (upper === "REJECTED" || upper === "DITOLAK") {
+                statusVal = "Ditolak";
+                return;
+              }
+
+              // 5. Akun Zoom
+              if (upper.indexOf("ZOOM 1") !== -1 || upper === "1") { akunVal = "Zoom 1"; return; }
+              if (upper.indexOf("ZOOM 2") !== -1 || upper === "2") { akunVal = "Zoom 2"; return; }
+              if (upper.indexOf("ZOOM 3") !== -1 || upper === "3") { akunVal = "Zoom 3"; return; }
+
+              // 6. Link Zoom
+              if (rawStr.startsWith("http://") || rawStr.startsWith("https://")) {
+                linkVal = rawStr;
+                return;
+              }
+
+              // 7. Deskripsi Teks
+              if (rawStr.length > 1 && isNaN(rawStr)) {
+                longTexts.push(rawStr);
+              }
+            });
+
+            var judul = "Acara Zoom";
+            var pemohon = emails[0] || "-";
+
+            if (longTexts.length >= 1) {
+              var candidates = longTexts.filter(function(t) { return t.length > 5; });
+              if (candidates.length > 0) judul = candidates[0];
+            }
 
             allBookings.push({
               ticketId: tId,
-              timestamp: c[1] ? String(c[1].f || c[1].v) : "-",
-              judul: rawJudul,
-              tanggal: formatDateIndo(rawTgl),
-              mulai: mulaiRaw,
-              selesai: selesaiRaw,
-              peserta: rawPeserta,
-              recording: rawRec,
-              emailPemohon: rawEmail,
-              emailAtasan: rawAtasan,
-              status: rawStatus,
-              akunZoom: rawAkun,
-              zoomUrl: rawLink
+              judul: judul,
+              tanggal: tglVal || "-",
+              mulai: times[0] || "-",
+              selesai: times[1] || "-",
+              emailPemohon: pemohon,
+              emailAtasan: emails[1] || "-",
+              status: statusVal,
+              akunZoom: akunVal,
+              zoomUrl: linkVal
             });
           });
         }
@@ -403,24 +437,9 @@
       renderBookingTable();
     }
 
-    function isPendingStatus(st) {
-      var s = String(st || "").toUpperCase();
-      return s.indexOf("MENUNGGU") !== -1 || s === "PENDING" || s === "";
-    }
-
-    function isApprovedStatus(st) {
-      var s = String(st || "").toUpperCase();
-      return s === "APPROVED" || s === "DISETUJUI";
-    }
-
-    function isRejectedStatus(st) {
-      var s = String(st || "").toUpperCase();
-      return s === "REJECTED" || s === "DITOLAK";
-    }
-
     function updateStats() {
-      var pending = allBookings.filter(function(b) { return isPendingStatus(b.status); }).length;
-      var approved = allBookings.filter(function(b) { return isApprovedStatus(b.status); }).length;
+      var pending = allBookings.filter(function(b) { return b.status === "Menunggu IT"; }).length;
+      var approved = allBookings.filter(function(b) { return b.status === "Disetujui"; }).length;
       document.getElementById("countPending").innerText = pending;
       document.getElementById("countApproved").innerText = approved;
       document.getElementById("countTotal").innerText = allBookings.length;
@@ -434,9 +453,9 @@
       var list = allBookings;
       if (filter !== "ALL") {
         list = allBookings.filter(function(b) {
-          if (filter === "PENDING") return isPendingStatus(b.status);
-          if (filter === "APPROVED") return isApprovedStatus(b.status);
-          if (filter === "REJECTED") return isRejectedStatus(b.status);
+          if (filter === "PENDING") return b.status === "Menunggu IT";
+          if (filter === "APPROVED") return b.status === "Disetujui";
+          if (filter === "REJECTED") return b.status === "Ditolak";
           return true;
         });
       }
@@ -450,19 +469,19 @@
         var tr = document.createElement("tr");
         tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
 
-        var pending = isPendingStatus(b.status);
-        var approved = isApprovedStatus(b.status);
-        var rejected = isRejectedStatus(b.status);
+        var isPending = (b.status === "Menunggu IT");
+        var isApproved = (b.status === "Disetujui");
+        var isRejected = (b.status === "Ditolak");
 
         var statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Menunggu IT</span>`;
-        if (approved) {
+        if (isApproved) {
           statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">✓ Disetujui</span>`;
-        } else if (rejected) {
+        } else if (isRejected) {
           statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">✗ Ditolak</span>`;
         }
 
         var actionBtns = "";
-        if (pending) {
+        if (isPending || !b.zoomUrl) {
           actionBtns = `
             <div class="flex items-center justify-center gap-1.5">
               <button onclick="openApproveModal('${b.ticketId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] shadow transition">
@@ -483,15 +502,14 @@
           <td class="p-4">
             <div class="font-mono font-bold text-indigo-600">${b.ticketId}</div>
             <div class="text-slate-800 font-semibold mt-0.5">${b.tanggal}</div>
-            <div class="text-slate-500 text-[11px]">${b.mulai} - ${b.selesai} WIB</div>
+            <div class="text-slate-500 text-[11px] font-medium">${b.mulai} - ${b.selesai} WIB</div>
           </td>
           <td class="p-4">
             <div class="font-bold text-slate-800 max-w-xs leading-snug">${b.judul}</div>
-            <div class="text-slate-500 text-[11px] mt-1">${b.peserta} peserta • Rec: ${b.recording}</div>
           </td>
           <td class="p-4">
             <div class="font-semibold text-slate-800">${b.emailPemohon}</div>
-            <div class="text-slate-400 text-[11px] mt-0.5">Atasan: ${b.emailAtasan}</div>
+            <div class="text-slate-400 text-[11px] mt-0.5">${b.emailAtasan !== '-' ? 'Atasan: ' + b.emailAtasan : ''}</div>
           </td>
           <td class="p-4">
             <div class="border ${accInfo.badge} px-2.5 py-1.5 rounded-xl inline-block max-w-[210px]">
@@ -517,9 +535,9 @@
       document.getElementById("modalPemohon").innerText = currentItem.emailPemohon;
       
       var rawAcc = String(currentItem.akunZoom || "").trim();
-      var accVal = "1";
-      if (rawAcc.indexOf("2") !== -1) accVal = "2";
-      else if (rawAcc.indexOf("3") !== -1) accVal = "3";
+      var accVal = "Zoom 1";
+      if (rawAcc.indexOf("2") !== -1) accVal = "Zoom 2";
+      else if (rawAcc.indexOf("3") !== -1) accVal = "Zoom 3";
       document.getElementById("modalAkunZoom").value = accVal;
 
       document.getElementById("modalZoomUrl").value = currentItem.zoomUrl || "";
@@ -560,7 +578,7 @@
         "Waktu Acara": currentItem.mulai + " - " + currentItem.selesai + " WIB",
         "Email pemohon": currentItem.emailPemohon,
         "Email atasan pemohon": currentItem.emailAtasan,
-        akunZoom: "Zoom " + akun,
+        akunZoom: akun,
         "Akun Zoom": akun,
         linkZoom: zoomUrl,
         "Zoom URL": zoomUrl,
