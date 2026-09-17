@@ -480,8 +480,9 @@
           statusBadge = `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">✗ Ditolak</span>`;
         }
 
-        var actionBtns = "";
-        if (isPending || !b.zoomUrl) {
+                var actionBtns = "";
+        // HANYA yang berstatus Menunggu IT yang menampilkan tombol Setujui & Tolak
+        if (isPending) {
           actionBtns = `
             <div class="flex items-center justify-center gap-1.5">
               <button onclick="openApproveModal('${b.ticketId}')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-lg text-[11px] shadow transition">
