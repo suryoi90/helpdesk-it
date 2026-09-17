@@ -8,74 +8,54 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    
-    /* Indikator Status Tanggal Kalender */
     .day-green { background-color: #ecfdf5; color: #065f46; border: 1.5px solid #10b981; }
     .day-green:hover { background-color: #10b981; color: #ffffff; }
-    
     .day-yellow { background-color: #fefce8; color: #854d0e; border: 1.5px solid #eab308; }
     .day-yellow:hover { background-color: #eab308; color: #ffffff; }
-    
     .day-gray { background-color: #f1f5f9; color: #94a3b8; border: 1.5px solid #cbd5e1; cursor: not-allowed; }
-    .day-gray:hover { background-color: #e2e8f0; }
-
     .day-selected { outline: 3px solid #4f46e5; font-weight: 800; transform: scale(1.04); }
   </style>
 </head>
 <body class="bg-[#f0f4f9] min-h-screen py-6 px-4 sm:px-6">
   <div class="max-w-7xl mx-auto space-y-5">
     
-    <!-- Top Header Banner -->
+    <!-- Header -->
     <div class="bg-white rounded-2xl shadow-sm border-t-4 border-indigo-600 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-4">
         <img src="https://lh3.googleusercontent.com/d/1fl09tFwRU-NavWdZ8jKG47IU7M6MqSJr" 
-             alt="Global Dispomedika" 
-             style="width: 170px; height: auto;" 
-             class="object-contain">
+             alt="Global Dispomedika" style="width: 170px; height: auto;" class="object-contain">
         <div>
-          <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-            Penjadwalan Acara Zoom GDM-HO
-          </h1>
-          <p class="text-xs text-slate-500 font-medium">
-            Kapasitas: <span class="font-bold text-indigo-600">3 Akun Zoom Meeting</span> • Sistem Persetujuan Tim IT
-          </p>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Penjadwalan Acara Zoom GDM-HO</h1>
+          <p class="text-xs text-slate-500 font-medium">Kapasitas: <span class="font-bold text-indigo-600">3 Akun Zoom Meeting</span> • Sistem Persetujuan Tim IT</p>
         </div>
       </div>
-      <a href="/" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-100 transition">
-        ← Kembali ke Portal Helpdesk
-      </a>
+      <a href="/" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold px-4 py-2 rounded-xl bg-indigo-50 border border-indigo-100 transition">← Kembali ke Portal Helpdesk</a>
     </div>
 
-    <!-- Alert Sukses Modal -->
+    <!-- Alert Sukses -->
     <div id="successModal" class="hidden bg-white border border-green-200 rounded-3xl p-8 shadow-xl text-center space-y-4">
       <div class="w-14 h-14 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
       <h3 class="text-2xl font-bold text-slate-800">Permintaan Acara Zoom Berhasil Diajukan!</h3>
       <p class="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
         Nomor Referensi: <span id="displayTicketId" class="font-bold font-mono text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg">-</span><br>
         Status saat ini: <span class="inline-block mt-1 px-3 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800">Menunggu Approval IT</span><br>
-        Salinan pengajuan telah dicatat ke sistem IT. Link Zoom akan dikonfirmasi setelah disetujui tim IT.
+        Link Zoom dan rincian meeting akan segera dikonfirmasi oleh Tim IT.
       </p>
       <div class="pt-2 flex justify-center gap-3">
-        <button onclick="resetZoomView()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">
-          + Buat Pengajuan Baru
-        </button>
+        <button onclick="resetZoomView()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow">+ Buat Pengajuan Baru</button>
       </div>
     </div>
 
-    <!-- MAIN TWO-COLUMN CONTAINER (KIRI: KALENDER | KANAN: FORMULIR) -->
+    <!-- LAYOUT DUA KOLOM -->
     <div id="mainLayout" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       
-      <!-- ================= KOLOM KIRI: KALENDER & JADWAL 3 AKUN ================= -->
+      <!-- KALENDER & RINCIAN 3 AKUN -->
       <div class="lg:col-span-6 space-y-4">
-        
-        <!-- Card Kalender Bulanan -->
         <div class="bg-white rounded-2xl shadow-sm p-5 sm:p-6 border border-slate-200">
-          
-          <!-- Header Navigasi Bulan -->
           <div class="flex items-center justify-between mb-4">
             <div>
               <h2 id="monthYearLabel" class="text-lg font-extrabold text-slate-800 tracking-tight">Bulan Tahun</h2>
-              <p class="text-[11px] text-slate-400">Klik salah satu tanggal untuk melihat ketersediaan jam</p>
+              <p class="text-[11px] text-slate-400">Klik tanggal untuk melihat ketersediaan jam</p>
             </div>
             <div class="flex items-center gap-1.5">
               <button type="button" onclick="changeMonth(-1)" class="w-8 h-8 rounded-lg border border-slate-200 hover:bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-sm">‹</button>
@@ -84,35 +64,19 @@
             </div>
           </div>
 
-          <!-- Legenda Warna Sesuai Permintaan User -->
           <div class="grid grid-cols-3 gap-2 py-2.5 px-3 bg-slate-50 rounded-xl mb-4 text-[11px] font-semibold text-center">
-            <div class="flex items-center justify-center gap-1.5 text-emerald-700">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <span>Hijau: Tersedia</span>
-            </div>
-            <div class="flex items-center justify-center gap-1.5 text-amber-700">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-              <span>Kuning: Mulai Terisi</span>
-            </div>
-            <div class="flex items-center justify-center gap-1.5 text-slate-500">
-              <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
-              <span>Abu: Penuh (3 Akun)</span>
-            </div>
+            <div class="text-emerald-700"><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1"></span>Hijau: Bebas</div>
+            <div class="text-amber-700"><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 mr-1"></span>Kuning: Mulai Terisi</div>
+            <div class="text-slate-500"><span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-400 mr-1"></span>Abu: Penuh (3 Akun)</div>
           </div>
 
-          <!-- Grid Nama Hari -->
           <div class="grid grid-cols-7 text-center font-bold text-[11px] text-slate-400 mb-2">
             <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
           </div>
-
-          <!-- Grid Tanggal -->
-          <div id="calendarDaysGrid" class="grid grid-cols-7 gap-1.5 text-center text-xs font-bold">
-            <!-- Render Otomatis via JS -->
-          </div>
-
+          <div id="calendarDaysGrid" class="grid grid-cols-7 gap-1.5 text-center text-xs font-bold"></div>
         </div>
 
-        <!-- Card Timeline Rincian 3 Akun Zoom Pada Tanggal Terpilih -->
+        <!-- Rincian Timeline 3 Akun -->
         <div class="bg-white rounded-2xl shadow-sm p-5 border border-slate-200 space-y-3">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2">
             <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
@@ -121,93 +85,85 @@
             </h3>
             <span class="text-[11px] text-slate-400">Kapasitas: 3 Akun Meeting</span>
           </div>
-
-          <!-- List 3 Akun Zoom -->
-          <div class="space-y-2 text-xs" id="timelineContainer">
-            <!-- Render Otomatis via JS -->
-          </div>
+          <div class="space-y-2 text-xs" id="timelineContainer"></div>
         </div>
-
       </div>
 
-      <!-- ================= KOLOM KANAN: FORMULIR PENGAJUAN ================= -->
+      <!-- FORMULIR PENGAJUAN -->
       <div class="lg:col-span-6">
         <form id="zoomForm" class="bg-white rounded-2xl shadow-sm p-6 sm:p-7 border border-slate-200 space-y-4 text-left">
           
           <div class="border-b border-slate-100 pb-3">
             <h2 class="text-base font-bold text-slate-900">Formulir Permintaan Acara Zoom GDM-HO</h2>
-            <p class="text-xs text-slate-500">Lengkapi jadwal acara Anda. Tanggal akan sinkron otomatis dengan kalender di sebelah kiri.</p>
+            <p class="text-xs text-slate-500">Lengkapi jadwal acara Anda. Tanggal sinkron otomatis dengan kalender di kiri.</p>
           </div>
 
-          <!-- 1. Judul Acara -->
+          <!-- 1. Judul Acara (Kolom C) -->
           <div>
             <label class="block text-gray-800 font-semibold text-xs mb-1">Judul Acara <span class="text-red-500">*</span></label>
-            <input type="text" id="judulAcara" name="Judul Acara" required placeholder="Contoh: Rapat Koordinasi Sales Q3"
+            <input type="text" id="judulAcara" required placeholder="Contoh: Meeting Manajemen HO & Cabang"
               class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800 transition">
           </div>
 
-          <!-- 2. Tanggal Acara -->
+          <!-- 2. Tanggal Acara (Kolom D) -->
           <div>
-            <label class="block text-gray-800 font-semibold text-xs mb-1">Tanggal acara <span class="text-red-500">*</span></label>
-            <input type="date" id="tanggalAcara" name="Tanggal acara" required onchange="handleDateInputChange(this.value)"
+            <label class="block text-gray-800 font-semibold text-xs mb-1">Tanggal Acara <span class="text-red-500">*</span></label>
+            <input type="date" id="tanggalAcara" required onchange="handleDateInputChange(this.value)"
               class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800 bg-transparent">
           </div>
 
-          <!-- 3. Jam Mulai & Jam Selesai -->
+          <!-- 3. Jam Mulai & Selesai (Kolom E & F) -->
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-gray-800 font-semibold text-xs mb-1">Mulai Acara <span class="text-red-500">*</span></label>
-              <input type="time" id="mulaiAcara" name="Mulai Acara" required onchange="checkSlotConflict()"
+              <input type="time" id="mulaiAcara" required onchange="checkSlotConflict()"
                 class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800 bg-transparent">
             </div>
             <div>
               <label class="block text-gray-800 font-semibold text-xs mb-1">Selesai Acara <span class="text-red-500">*</span></label>
-              <input type="time" id="selesaiAcara" name="Selesai Acara" required onchange="checkSlotConflict()"
+              <input type="time" id="selesaiAcara" required onchange="checkSlotConflict()"
                 class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800 bg-transparent">
             </div>
           </div>
 
-          <!-- Box Peringatan Bentrok Jadwal -->
           <div id="conflictAlert" class="hidden p-3 rounded-xl text-xs font-semibold"></div>
 
-          <!-- 4. Jumlah Peserta -->
+          <!-- 4. Jumlah Peserta (Kolom G) -->
           <div>
             <label class="block text-gray-800 font-semibold text-xs mb-1">Jumlah Peserta <span class="text-red-500">*</span></label>
-            <input type="text" id="jumlahPeserta" name="Jumlah Peserta" required placeholder="Contoh: 30 orang"
+            <input type="text" id="jumlahPeserta" required placeholder="Contoh: 25"
               class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800">
           </div>
 
-          <!-- 5. Recording Acara -->
+          <!-- 5. Recording (Kolom H) -->
           <div>
-            <label class="block text-gray-800 font-semibold text-xs mb-2">Recording acara <span class="text-red-500">*</span></label>
+            <label class="block text-gray-800 font-semibold text-xs mb-2">Recording Acara <span class="text-red-500">*</span></label>
             <div class="flex items-center gap-6 text-xs text-gray-700">
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="Recording acara" value="Ya, Perlu diaktifkan" required class="text-indigo-600">
+                <input type="radio" name="recordingAcara" value="Ya, Perlu diaktifkan" required class="text-indigo-600">
                 <span>Ya, Perlu diaktifkan</span>
               </label>
               <label class="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="Recording acara" value="Tidak Perlu" checked required class="text-indigo-600">
+                <input type="radio" name="recordingAcara" value="Tidak Perlu" checked required class="text-indigo-600">
                 <span>Tidak Perlu</span>
               </label>
             </div>
           </div>
 
-          <!-- 6. Email Pemohon -->
+          <!-- 6. Email Pemohon (Kolom I) -->
           <div class="relative">
-            <label class="block text-gray-800 font-semibold text-xs mb-1">Email pemohon <span class="text-red-500">*</span></label>
-            <input type="email" id="emailPemohon" name="Email pemohon" required autocomplete="off"
-              placeholder="nama@globaldispomedika.com"
-              oninput="handleEmployeeSearch(this.value, 'pemohon')"
+            <label class="block text-gray-800 font-semibold text-xs mb-1">Email Pemohon <span class="text-red-500">*</span></label>
+            <input type="email" id="emailPemohon" required autocomplete="off"
+              placeholder="nama@globaldispomedika.com" oninput="handleEmployeeSearch(this.value, 'pemohon')"
               class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800">
             <div id="autocompletePemohon" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-gray-100"></div>
           </div>
 
-          <!-- 7. Email Atasan Pemohon -->
+          <!-- 7. Email Atasan (Kolom J) -->
           <div class="relative">
-            <label class="block text-gray-800 font-semibold text-xs mb-1">Email atasan pemohon <span class="text-red-500">*</span></label>
-            <input type="email" id="emailAtasan" name="Email atasan pemohon" required autocomplete="off"
-              placeholder="atasan@globaldispomedika.com"
-              oninput="handleEmployeeSearch(this.value, 'atasan')"
+            <label class="block text-gray-800 font-semibold text-xs mb-1">Email Atasan Pemohon <span class="text-red-500">*</span></label>
+            <input type="email" id="emailAtasan" required autocomplete="off"
+              placeholder="atasan@globaldispomedika.com" oninput="handleEmployeeSearch(this.value, 'atasan')"
               class="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-1.5 text-sm text-gray-800">
             <div id="autocompleteAtasan" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl z-50 max-h-48 overflow-y-auto divide-y divide-gray-100"></div>
           </div>
@@ -238,12 +194,17 @@
     var employeeList = [];
     var bookedMeetings = [];
 
-    // FUNGSI SERBA-BISA: Konversi segala format tanggal ke YYYY-MM-DD
+    function normalizeTime(val) {
+      if (!val) return "";
+      var str = String(val).trim();
+      var m = str.match(/(\d{1,2})[:.](\d{2})/);
+      if (m) return m[1].padStart(2, "0") + ":" + m[2];
+      return str;
+    }
+
     function normalizeDateToYMD(val) {
       if (!val) return "";
       var str = String(val).trim();
-
-      // Kasus 1: Date(2026,8,14) dari GViz Google
       if (str.startsWith("Date(")) {
         var p = str.replace("Date(", "").replace(")", "").split(",");
         if (p.length >= 3) {
@@ -253,40 +214,11 @@
           return y + "-" + m + "-" + d;
         }
       }
-
-      // Kasus 2: Format YYYY-MM-DD
-      var matchYMD = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
-      if (matchYMD) {
-        return matchYMD[1] + "-" + matchYMD[2].padStart(2, "0") + "-" + matchYMD[3].padStart(2, "0");
-      }
-
-      // Kasus 3: Format DD-MM-YYYY atau DD/MM/YYYY
-      var matchDMY = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
-      if (matchDMY) {
-        return matchDMY[3] + "-" + matchDMY[2].padStart(2, "0") + "-" + matchDMY[1].padStart(2, "0");
-      }
-
-      // Kasus 4: Standar Date Parse
-      var parsed = new Date(str);
-      if (!isNaN(parsed.getTime())) {
-        var y4 = parsed.getFullYear();
-        var m4 = String(parsed.getMonth() + 1).padStart(2, "0");
-        var d4 = String(parsed.getDate()).padStart(2, "0");
-        return y4 + "-" + m4 + "-" + d4;
-      }
-
-      return str;
-    }
-
-    // Format Jam ke HH:mm
-    function normalizeTime(val) {
-      if (!val) return "";
-      var str = String(val).trim();
-      var match = str.match(/(\d{1,2})[:.](\d{2})/);
-      if (match) {
-        return match[1].padStart(2, "0") + ":" + match[2];
-      }
-      return str;
+      var mYMD = str.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+      if (mYMD) return mYMD[1] + "-" + mYMD[2].padStart(2, "0") + "-" + mYMD[3].padStart(2, "0");
+      var mDMY = str.match(/^(\d{1,2})[-\/](\d{1,2})[-\/](\d{4})/);
+      if (mDMY) return mDMY[3] + "-" + mDMY[2].padStart(2, "0") + "-" + mDMY[1].padStart(2, "0");
+      return str.split("T")[0];
     }
 
     window.addEventListener("DOMContentLoaded", function() {
@@ -295,7 +227,7 @@
       loadZoomSchedule();
     });
 
-    // 1. Ambil Data Jadwal Zoom Terdaftar dari Google Sheet (Real-Time)
+    // 1. Ambil Data Jadwal Zoom Sesuai Kolom Spreadsheet Anda (Kolom C, D, E, F, L)
     async function loadZoomSchedule() {
       try {
         var gvizUrl = "https://docs.google.com/spreadsheets/d/" + SHEET_ID + "/gviz/tq?tqx=out:json&sheet=JADWAL%20ZOOM";
@@ -308,63 +240,47 @@
         if (data && data.table && data.table.rows) {
           data.table.rows.forEach(function(r) {
             var c = r.c;
-            if (!c) return;
+            if (!c || !c[0]) return;
 
-            // Cari kolom tanggal, jam mulai, jam selesai secara fleksibel
-            var tId = c[0] ? String(c[0].v || "").trim() : "";
-            if (tId === "No. Tiket" || tId === "No." || (tId.toLowerCase().indexOf("tiket") !== -1 && !tId.startsWith("ZM-"))) {
-              return;
-            }
+            var tId = String(c[0].v || "").trim();
+            if (tId === "No. Tiket" || tId === "No." || (tId.toLowerCase().indexOf("tiket") !== -1 && !tId.startsWith("ZM-"))) return;
 
-            // Ambil data sesuai susunan sheet JADWAL ZOOM Anda
-            // Coba index 3 (format form) atau index 5 (format backend)
-            var rawTgl = "";
-            var rawMulai = "";
-            var rawSelesai = "";
-            var rawJudul = "";
-            var rawAkun = "";
-            var rawStatus = "";
-
-            if (c[3] && (c[3].f || c[3].v)) {
-              rawTgl = c[3].f || c[3].v;
-              rawMulai = c[4] ? (c[4].f || c[4].v) : "";
-              rawSelesai = c[5] ? (c[5].f || c[5].v) : "";
-              rawJudul = c[2] ? c[2].v : "Acara Zoom";
-              rawAkun = c[11] ? c[11].v : "1";
-              rawStatus = c[10] ? c[10].v : "Approved";
-            } else if (c[5] && (c[5].f || c[5].v)) {
-              rawTgl = c[5].f || c[5].v;
-              rawMulai = c[6] ? (c[6].f || c[6].v) : "";
-              rawSelesai = c[7] ? (c[7].f || c[7].v) : "";
-              rawJudul = c[8] ? c[8].v : "Acara Zoom";
-              rawAkun = c[10] ? c[10].v : "1";
-              rawStatus = c[11] ? c[11].v : "Approved";
-            }
+            // Header Anda:
+            // c[2] = Judul Acara
+            // c[3] = Tanggal
+            // c[4] = Mulai
+            // c[5] = Selesai
+            // c[10]= Status
+            // c[11]= Akun Zoom (1 / 2 / 3)
+            var rawJudul = c[2] ? String(c[2].v) : "Acara Zoom";
+            var rawTgl = c[3] ? (c[3].f || c[3].v) : "";
+            var rawMulai = c[4] ? (c[4].f || c[4].v) : "";
+            var rawSelesai = c[5] ? (c[5].f || c[5].v) : "";
+            var rawStatus = c[10] ? String(c[10].v).trim() : "Disetujui";
+            var rawAkun = c[11] ? String(c[11].v).trim() : "1";
 
             var tglYMD = normalizeDateToYMD(rawTgl);
             var mulaiStr = normalizeTime(rawMulai);
             var selesaiStr = normalizeTime(rawSelesai);
-            var statusStr = String(rawStatus || "Approved").trim();
 
             var accNum = 1;
-            var accText = String(rawAkun || "1");
-            if (accText.indexOf("2") !== -1) accNum = 2;
-            else if (accText.indexOf("3") !== -1) accNum = 3;
+            if (rawAkun.indexOf("2") !== -1) accNum = 2;
+            else if (rawAkun.indexOf("3") !== -1) accNum = 3;
 
-            if (tglYMD && statusStr !== "REJECTED" && statusStr !== "Ditolak") {
+            if (tglYMD && rawStatus.toUpperCase() !== "DITOLAK" && rawStatus.toUpperCase() !== "REJECTED") {
               bookedMeetings.push({
                 tanggal: tglYMD,
                 mulai: mulaiStr,
                 selesai: selesaiStr,
-                judul: String(rawJudul || "Acara Zoom"),
+                judul: rawJudul,
                 akun: accNum,
-                status: statusStr
+                status: rawStatus
               });
             }
           });
         }
       } catch (e) {
-        console.log("Error fetch schedule:", e);
+        console.log("Error fetch:", e);
       }
       renderCalendar();
       renderTimeline(selectedDateStr);
@@ -446,16 +362,12 @@
       selectCalendarDate(new Date().toISOString().split('T')[0]);
     }
 
-    // Hitung berapa akun yang aktif pada tanggal tersebut
     function getConcurrentBookingsCount(dateStr) {
       var dayEvents = bookedMeetings.filter(function(m) { return m.tanggal === dateStr; });
       if (dayEvents.length === 0) return 0;
-      
-      // Hitung akun unik yang dipakai hari itu
       var activeAccounts = {};
       dayEvents.forEach(function(ev) { activeAccounts[ev.akun] = true; });
-      var count = Object.keys(activeAccounts).length;
-      return Math.min(count, 3);
+      return Math.min(Object.keys(activeAccounts).length, 3);
     }
 
     // 3. Render Timeline 3 Akun Zoom
@@ -624,43 +536,33 @@
       var mulaiVal = document.getElementById("mulaiAcara").value;
       var selesaiVal = document.getElementById("selesaiAcara").value;
       var pesertaVal = document.getElementById("jumlahPeserta").value.trim();
-      var recordingVal = document.querySelector("input[name='Recording acara']:checked") ? document.querySelector("input[name='Recording acara']:checked").value : "Tidak Perlu";
+      var recordingVal = document.querySelector("input[name='recordingAcara']:checked").value;
       var emailPemohonVal = document.getElementById("emailPemohon").value.trim();
       var emailAtasanVal = document.getElementById("emailAtasan").value.trim();
 
-      // Pilih akun zoom yang belum bentrok pada jam tersebut
+      // Alokasikan akun zoom 1, 2, atau 3 yang kosong
       var dayEvents = bookedMeetings.filter(function(m) { return m.tanggal === tglVal; });
-      var assignedAccount = 1;
+      var assignedAccount = "1";
       for (var a = 1; a <= 3; a++) {
         var isBusy = dayEvents.some(function(ev) {
           return ev.akun === a && (mulaiVal < ev.selesai && selesaiVal > ev.mulai);
         });
-        if (!isBusy) { assignedAccount = a; break; }
+        if (!isBusy) { assignedAccount = String(a); break; }
       }
 
-      // Payload lengkap (mendukung format Google Form & format Apps Script)
+      // PAYLOAD SESUAI PERSIS DENGAN KOLOM C, D, E, F, G, H, I, J, L
       var payload = {
         action: "zoomRequest",
         ticketId: currentTicketId,
-        "Jenis pengajuan": "Form permintaan Acara Zoom GDM-HO",
-        "Judul Acara": judulVal,
-        topik: judulVal,
-        "Tanggal acara": tglVal,
+        judul: judulVal,
         tanggal: tglVal,
-        "Mulai Acara": mulaiVal,
-        jamMulai: mulaiVal,
-        "Selesai Acara": selesaiVal,
-        jamSelesai: selesaiVal,
-        "Waktu Acara": mulaiVal + " - " + selesaiVal + " WIB",
-        "Jumlah Peserta": pesertaVal,
-        "Recording acara": recordingVal,
-        "Email pemohon": emailPemohonVal,
+        mulai: mulaiVal,
+        selesai: selesaiVal,
+        peserta: pesertaVal,
+        recording: recordingVal,
         email: emailPemohonVal,
-        "Email Pelapor": emailPemohonVal,
-        "Email atasan pemohon": emailAtasanVal,
-        "Akun Zoom": "Zoom " + assignedAccount,
-        akunZoom: "Zoom " + assignedAccount,
-        "Status Approval": "Menunggu Approval IT"
+        emailAtasan: emailAtasanVal,
+        akunZoom: assignedAccount
       };
 
       try {
@@ -676,19 +578,17 @@
         console.log("Sync zoom error:", err);
       }
 
-      // Tampilkan Modal Berhasil
       document.getElementById("displayTicketId").innerText = currentTicketId;
       document.getElementById("mainLayout").classList.add("hidden");
       document.getElementById("successModal").classList.remove("hidden");
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Update jadwal lokal langsung di browser
       bookedMeetings.push({
         tanggal: tglVal,
         mulai: mulaiVal,
         selesai: selesaiVal,
         judul: judulVal,
-        akun: assignedAccount,
+        akun: parseInt(assignedAccount),
         status: "Menunggu Approval IT"
       });
 
