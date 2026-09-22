@@ -682,7 +682,9 @@
       handleReset();
     }
 
-    // Submit Handler sinkron dengan kode.gs
+    // ========================================================
+    // SUBMIT HANDLER PRESISI (SINKRON DENGAN Form responses 1)
+    // ========================================================
     document.getElementById("ticketForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
@@ -710,50 +712,74 @@
         nama = rawNama.replace(/\s*\([^)]+\)$/, "").trim();
       }
 
-      // 2. Kumpulkan Kategori & Sub Kategori
+      // 2. Kumpulkan Kategori & Masing-Masing Sub Kategori
       var kat = document.getElementById("kategoriSelect").value;
-      var subKat = "";
+      var valHardware = "";
+      var valSoftware = "";
+      var valIsu = "";
+      var valJaringan = "";
+      var valAkun = "";
+
       if (kat === "Hardware") {
-        subKat = document.getElementById("selectHardware").value;
-        if (subKat === "Yang lain:" && document.getElementById("inputHardwareLainnya").value.trim()) {
-          subKat = document.getElementById("inputHardwareLainnya").value.trim();
+        valHardware = document.getElementById("selectHardware").value;
+        if (valHardware === "Yang lain:" && document.getElementById("inputHardwareLainnya").value.trim()) {
+          valHardware = document.getElementById("inputHardwareLainnya").value.trim();
         }
       } else if (kat === "Software") {
-        subKat = document.getElementById("selectSoftware").value;
-        if (subKat === "Yang lain:" && document.getElementById("inputSoftwareLainnya").value.trim()) {
-          subKat = document.getElementById("inputSoftwareLainnya").value.trim();
+        valSoftware = document.getElementById("selectSoftware").value;
+        if (valSoftware === "Yang lain:" && document.getElementById("inputSoftwareLainnya").value.trim()) {
+          valSoftware = document.getElementById("inputSoftwareLainnya").value.trim();
         }
-        var isu = document.getElementById("selectJenisIsu").value;
-        if (isu === "Yang lain:" && document.getElementById("inputJenisIsuLainnya").value.trim()) {
-          isu = document.getElementById("inputJenisIsuLainnya").value.trim();
+        valIsu = document.getElementById("selectJenisIsu").value;
+        if (valIsu === "Yang lain:" && document.getElementById("inputJenisIsuLainnya").value.trim()) {
+          valIsu = document.getElementById("inputJenisIsuLainnya").value.trim();
         }
-        if (isu) subKat += " (Isu: " + isu + ")";
       } else if (kat === "Jaringan") {
-        subKat = document.getElementById("selectJaringan").value;
-        if (subKat === "Yang lain:" && document.getElementById("inputJaringanLainnya").value.trim()) {
-          subKat = document.getElementById("inputJaringanLainnya").value.trim();
+        valJaringan = document.getElementById("selectJaringan").value;
+        if (valJaringan === "Yang lain:" && document.getElementById("inputJaringanLainnya").value.trim()) {
+          valJaringan = document.getElementById("inputJaringanLainnya").value.trim();
         }
       } else if (kat === "Akun dan keamanan") {
-        subKat = document.getElementById("selectAkun").value;
-        if (subKat === "Yang lain:" && document.getElementById("inputAkunLainnya").value.trim()) {
-          subKat = document.getElementById("inputAkunLainnya").value.trim();
+        valAkun = document.getElementById("selectAkun").value;
+        if (valAkun === "Yang lain:" && document.getElementById("inputAkunLainnya").value.trim()) {
+          valAkun = document.getElementById("inputAkunLainnya").value.trim();
         }
       }
 
       var urgensiEl = document.querySelector('input[name="Tingkat urgensi"]:checked');
       var urgensi = urgensiEl ? urgensiEl.value : "Low";
+      var emailVal = document.getElementById("emailInput").value.trim();
+      var deptVal = document.getElementById("deptSelect").value;
+      var jenisVal = document.getElementById("jenisPengajuan").value;
+      var kendalaVal = document.getElementById("deskripsiKendala").value.trim();
+      var namaGabung = nama + (nik ? " (" + nik + ")" : "");
 
-      // 3. Susun data payload yang pas dengan backend Apps Script
+      // 3. Susun Payload Ganda (Mendukung nama kolom lama & baru)
       var payload = {
         action: "ticket",
         nama: nama,
         nik: nik,
-        email: document.getElementById("emailInput").value.trim(),
-        dept: document.getElementById("deptSelect").value,
-        jenisPengajuan: document.getElementById("jenisPengajuan").value,
+        email: emailVal,
+        dept: deptVal,
+        jenisPengajuan: jenisVal,
         urgensi: urgensi,
-        kategori: kat + (subKat ? " - " + subKat : ""),
-        kendala: document.getElementById("deskripsiKendala").value.trim(),
+        kategori: kat,
+        kendala: kendalaVal,
+
+        // Format pertanyaan sesuai judul di Sheet Form responses 1
+        "Nama Lengkap": namaGabung,
+        "Email Pelapor": emailVal,
+        "Department/Team": deptVal,
+        "Jenis pengajuan": jenisVal,
+        "Tingkat urgensi": urgensi,
+        "Kategori kendala": kat,
+        "Jenis hardware apa yang mengalami kendala?": valHardware,
+        "Jenis software apa yang mengalami kendala?": valSoftware,
+        "Jenis isu": valIsu,
+        "Jenis jaringan apa yang mengalami kendala?": valJaringan,
+        "Jenis Akun dan keamanan apa yang mengalami kendala?": valAkun,
+        "Deskripsi Kendala": kendalaVal,
+
         fileName: currentAttachment.fileName,
         fileType: currentAttachment.fileType,
         fileData: currentAttachment.fileData
@@ -772,7 +798,7 @@
           document.getElementById("ticketForm").classList.add("hidden");
           document.getElementById("successModal").classList.remove("hidden");
         } else {
-          alert("Gagal: " + (res.message || "Terjadi kesalahan sistem."));
+          alert("Gagal: " + (res.message || "Terjadi kendala sistem saat memproses tiket."));
         }
       } catch (err) {
         alert("Gagal mengirim tiket. Periksa koneksi jaringan Anda.");
